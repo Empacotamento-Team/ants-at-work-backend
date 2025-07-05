@@ -1,10 +1,10 @@
-package com.empacoters.ants_at_work_backend;
+package com.empacoters.antsback;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AntsAtWorkBackendApplicationTests {
+class AntsBackApplicationTests {
 
 	@Test
 	void contextLoads() {

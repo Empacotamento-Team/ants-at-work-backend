@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.empacoters</groupId>
-	<artifactId>ants-at-work-backend</artifactId>
+	<artifactId>antsback</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Ants at Work Backend</name>
 	<description>Backend for Ants at Work project.</description>
