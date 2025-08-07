@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Backend Docs",
+    "description": "O título na navbar"
+  },
+  "logo.alt": {
+    "message": "Ants At Work Logo",
+    "description": "O texto alternativo da logo"
+  },
+  "item.label.Tutorial": {
+    "message": "Tutorial",
+    "description": "O item de navegação na navbar com com rótulo Tutorial"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "O item de navegação na navbar com com rótulo Blog"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "O item de navegação na navbar com com rótulo GitHub"
+  }
+}

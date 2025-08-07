@@ -1,0 +1,181 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Controllers
+Todos os controladores dentro do contexto de identidade.
+
+
+## AuthController
+Controlador responsável por gerenciar a autenticação de usuários no contexto de identidade.
+
+### POST `/auth/register`
+Registra um usuário no sistema, com base nos dados do corpo da requisição.
+- Autenticação: não é necessária.
+
+:::warning
+
+A dinâmica de registro será alterada para permitir que somente administradores autenticados
+possam cadastrar novos usuários.
+
+:::
+
+```json title="Exemplo de corpo da requisição"
+{
+  "name": "Evelyn",
+  "email": "evelyn@example.com",
+  "password": "potato123"
+}
+```
+
+#### Erros esperados
+| Código | Tipo HTTP      | Nome                  | Descrição                                                                       |
+|:-------|:---------------|:----------------------|:--------------------------------------------------------------------------------|
+| 409    | `CONFLICT`     | `EMAIL_JA_CADASTRADO` | Ocorre caso o e-mail posto na requisição já esteja cadastrado na base de dados. |
+| 400    | `BAD_REQUEST`  | `EMAIL_INVALIDO`      | Ocorre caso o e-mail não esteja em um formato válido.                           |
+<br/>
+
+### POST `/auth/login`
+Efetua o login com base nas credenciais e retorna os tokens relevantes.
+
+#### Exemplo
+<Tabs>
+    <TabItem value="Corpo da Requisição">
+        ```json
+        {
+          "email": "carlos@example.com",
+          "password": "carlinhos123"
+        }
+        ```
+    </TabItem>
+    <TabItem value="Resposta">
+        ```json
+        {
+          "accessToken": "eyj1poiafsdjlk23",
+          "refreshToken": "ey121example09u4324"
+        }
+        ```
+    </TabItem>
+</Tabs>
+
+#### Erros esperados
+| Código | Tipo HTTP      | Nome                    | Descrição                                             |
+|:-------|:---------------|:------------------------|:------------------------------------------------------|
+| 401    | `UNAUTHORIZED` | `CREDENCIAIS_INVALIDAS` | Ocorre caso o e-mail e a senha não sejam válidos.     |
+| 400    | `BAD_REQUEST`  | `EMAIL_INVALIDO`        | Ocorre caso o e-mail não esteja em um formato válido. |
+<br/>
+
+### POST `/auth/refresh`
+Com base no refreshToken dado, gera um novo accessToken e um novo refreshToken, a fim de firmar a rotatividade de tokens
+para mais segurança.
+
+#### Exemplo
+<Tabs>
+    <TabItem value="Corpo da Requisição">
+        ```json
+        {
+          "refreshToken": "ey1212examplesdfsdoiu"
+        }
+        ```
+    </TabItem>
+    <TabItem value="Resposta">
+        ```json
+        {
+          // Note que é o mesmo formato de resposta do login.
+          "accessToken": "eyj1poiafsdjlk23",
+          "refreshToken": "ey121example09u4324"
+        }
+        ```
+    </TabItem>
+</Tabs>
+
+#### Erros esperados
+| Código | Tipo HTTP      | Nome             | Descrição                                                                                                                                      |
+|:-------|:---------------|:-----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|
+| 401    | `UNAUTHORIZED` | `TOKEN_INVALIDO` | Ocorre caso o refreshToken passado seja completamente inválido, não esteja vinculado a um usuário na base de dados ou já tenha sido utilizado. |
+| 401    | `UNAUTHORIZED` | `TOKEN_EXPIRADO` | Ocorre caso o refreshToken passado seja válido, porém tenha expirado.                                                                          |
+<br/>
+
+### POST `/auth/logout`
+Efetua a invalidação imediata de um refreshToken com base no que é passado. Não há corpo de resposta caso tenha
+sido bem-sucedido.
+
+#### Exemplo
+```json title="Corpo da requisição"
+{
+  "refreshToken": "ey23123example3094kld"
+}
+```
+
+#### Erros esperados
+| Código | Tipo HTTP      | Nome             | Descrição                                                                                                                                      |
+|:-------|:---------------|:-----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|
+| 401    | `UNAUTHORIZED` | `TOKEN_INVALIDO` | Ocorre caso o refreshToken passado seja completamente inválido, não esteja vinculado a um usuário na base de dados ou já tenha sido utilizado. |
+
+---
+
+## UserController
+Controlador responsável por gerenciar usuários dentro do contexto de Identidade.
+
+:::note
+
+Todos os endpoints deste controller exigem que o usuário esteja autenticado por Bearer Token ou API Key.
+Caso não seja o caso, os erros de `TOKEN_INVALIDO` vão aparecer como resposta.
+
+:::
+
+### GET `/users/me`
+Busca as informações do usuário autenticado.
+
+#### Exemplo
+```json title="Resposta"
+{
+  "id": 1,
+  "name": "Joao",
+  "email": "joao@example.com"
+}
+```
+<br/>
+
+### GET `/users/:id`
+Busca as informações do usuário com o id especificado.
+
+#### Exemplo
+```http request title="Requisição HTTP"
+GET http://ants-at-work-backend.example/users/3
+```
+
+```json title="Resposta"
+{
+  "id": 3,
+  "name": "Pedro",
+  "email": "pedro@example.com"
+}
+```
+
+#### Erros esperados
+| Código | Tipo HTTP   | Nome                 | Descrição                                                                     |
+|:-------|:------------|:---------------------|:------------------------------------------------------------------------------|
+| 404    | `NOT_FOUND` | `USUARIO_NAO_EXISTE` | Ocorre caso o usuário com respectiva id não seja encontrado na base de dados. |
+<br/>
+
+### DELETE `/users/:id`
+Apaga um usuário com o id especificado da base de dados e em caso de sucesso, o status http é _204 (No content)_.
+
+:::info
+
+Por enquanto, somente o próprio usuário pode apagar seu registro. Essa dinâmica pode e deve ser alterada nas próximas
+mudanças do sistema.
+
+:::
+
+
+#### Exemplo
+```http request title="Requisição HTTP"
+DELETE http://ants-at-work-backend.example/users/3
+```
+
+#### Erros esperados
+| Código | Tipo HTTP      | Nome                    | Descrição                                                                     |
+|:-------|:---------------|:------------------------|:------------------------------------------------------------------------------|
+| 404    | `NOT_FOUND`    | `USUARIO_NAO_EXISTE`    | Ocorre caso o usuário com respectiva id não seja encontrado na base de dados. |
+| 401    | `UNAUTHORIZED` | `CREDENCIAIS_INVALIDAS` | Ocorre caso o usuário a fazer a requisição não seja o usuário a ser apagado.  |
