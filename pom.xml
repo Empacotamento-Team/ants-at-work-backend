@@ -92,6 +92,16 @@
 			<artifactId>java-jwt</artifactId>
 			<version>4.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.jknack</groupId>
+			<artifactId>handlebars</artifactId>
+			<version>4.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId> <!-- Vulnerability fix for handlebars -->
+			<artifactId>commons-lang3</artifactId>
+			<version>3.18.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
