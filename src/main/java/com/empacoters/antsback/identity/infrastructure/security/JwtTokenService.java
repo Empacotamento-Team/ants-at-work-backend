@@ -25,8 +25,8 @@ public class JwtTokenService implements TokenService {
     private final UserRepository userRepository;
 
     public JwtTokenService(
-        @Value("${security.token.secret") String secret,
-        UserRepository userRepository
+            @Value("${security.token.secret}") String secret,
+            UserRepository userRepository
     ) {
         this.algorithm = Algorithm.HMAC256(secret);
         this.verifier = JWT.require(algorithm).build();
@@ -59,6 +59,31 @@ public class JwtTokenService implements TokenService {
         }
     }
 
+    public String generatePasswordResetToken(User user) {
+        try {
+            Instant expiration = getPasswordResetExpirationDate();
+            return JWT.create()
+                    .withIssuer("auth-password-reset")
+                    .withSubject(user.email().address())
+                    .withClaim("type", "password-reset")
+                    .withExpiresAt(expiration)
+                    .sign(algorithm);
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Erro ao gerar token de redefinição de senha.");
+        }
+    }
+
+    public boolean isPasswordResetToken(String token) {
+        try {
+            var jwt = verifier.verify(token);
+            String issuer = jwt.getIssuer();
+            String type = jwt.getClaim("type").asString();
+            return "auth-password-reset".equals(issuer) && "password-reset".equals(type);
+        } catch (JWTVerificationException e) {
+            return false;
+        }
+    }
+
     @Override
     public TokenStatus validateToken(String token) {
         try {
@@ -80,6 +105,10 @@ public class JwtTokenService implements TokenService {
         } catch (JWTVerificationException e) {
             return null;
         }
+    }
+
+    private Instant getPasswordResetExpirationDate() {
+        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
     }
 
     private Instant getExpirationDate() {
