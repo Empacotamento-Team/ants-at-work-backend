@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <style>
+            body {
+                background-color: #f3e9e0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            h1 {
+                color: rgb(0, 0, 0);
+            }
+
+            p {
+                color: rgb(0, 0, 0);
+            }
+
+            p.senha {
+                color : whitesmoke;
+                padding: 10px ;
+                border-radius: 10px;
+                background-color: #3F2323;
+                width:150px;
+                margin: auto;
+            }
+
+            div.caixa {
+                background-color: white;
+                max-width:600px;
+                margin: 2rem;
+                border-radius: 15px;
+                padding: 24px;
+            }
+
+            div.sapateira p {
+                color:#4b3c30;
+            }
+
+            div.sapateira {
+                margin-top: 1rem;
+            }
+
+            img.icon {
+                width: 50px;
+            }
+
+            img.logo {
+                width: 130px;
+            }
+
+            a {
+                text-decoration: none;
+                color: #916f54;
+            }
+
+            a:hover {
+                color:#3F2323
+            }
+
+        </style>
+    </head>
+    <body>
+        <img src="./img/ants-at-work-logo.png" alt="Logo Ants At Work" class="logo">
+        <div class="caixa">
+            <img src="./img/lock.svg" alt="cadeado" class="icon">
+            <h1>Olá, {{usuario}}!</h1>
+            <p>Seja bem-vindo(a) à nossa plataforma.
+            <br/>Sua conta já está pronta para uso, acesse este <a href="{{link}}">link</a> e use esta senha de primeiro acesso:</p>
+            <p class="senha"><strong>{{senha}}</strong></p>
+            <p>Após o uso desta senha, será necessário a criação de uma nova por questões de segurança.</p>           
+        </div>
+        <div class="sapateira">
+            <p>Este e-mail foi gerado automaticamente. Não responda.</p>
+            <p>Atenciosamente,
+            <br/>Equipe Ants At Work</p>
+        </div>
+    </body>
+</html>
