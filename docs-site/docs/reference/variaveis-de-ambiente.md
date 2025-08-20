@@ -22,3 +22,12 @@ Todas as variáveis relacionadas à base de dados.
 * `DB_PASSWORD` — Senha do usuário para acesso ao banco de dados. Por padrão: '1234'.
 * `DB_PORT` — Porta de acesso ao banco de dados. Por padrão: 3306.
 * `DB_USERNAME` — Nome de usuário para acesso ao banco de dados. Por padrão: 'root'.
+
+
+## Variáveis de Mailing
+Todas variáveis relacionadas a envio de e-mails etc.
+
+* `MAIL_HOST` — Host SMTP usado para o envio de e-mails. Por exemplo: 'smtp.gmail.com'.
+* `MAIL_PORT` — Porta definida para uso do serviço SMTP.
+* `MAIL_USER` — Endereço de e-mail que o sistema usará para enviar outros e-mails.
+* `MAIL_PASSWORD` — Senha/Senha de aplicativo usada para autenticação do *MAIL_USER*.
