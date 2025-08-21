@@ -11,6 +11,7 @@ import com.empacoters.antsback.shared.application.services.EmailTemplateRenderer
 import com.empacoters.antsback.shared.vo.Email;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -73,12 +74,16 @@ public class RequestPasswordResetUseCase {
         var destinatarios = new Email[] {user.email()};
         var assunto = "Redefinição de Senha!";
         var modelo = "password-reset";
+        String link = UriComponentsBuilder.fromUriString(frontendUrl + "/reset-password")
+                .queryParam("token", token)
+                .toUriString();
 
         Map<String, Object> dados = new HashMap<>();
         dados.put("usuario", user.name().split(" ")[0]);
-        dados.put("link", frontendUrl + "reset-password" + token);
+        dados.put("link" , link);
 
         var mensagem = this.emailTemplateRenderer.render(modelo, dados);
         this.emailSender.send(destinatarios, assunto, mensagem);
     }
 }
+
