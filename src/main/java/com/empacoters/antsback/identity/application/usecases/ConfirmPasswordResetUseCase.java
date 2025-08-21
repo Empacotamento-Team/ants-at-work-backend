@@ -9,6 +9,7 @@ import com.empacoters.antsback.identity.domain.repository.PasswordResetTokenRepo
 import com.empacoters.antsback.identity.domain.repository.RefreshTokenRepository;
 import com.empacoters.antsback.identity.domain.repository.UserRepository;
 import com.empacoters.antsback.identity.infrastructure.security.JwtTokenService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,9 +33,9 @@ public class ConfirmPasswordResetUseCase {
         this.hasher = hasher;
         this.jwtTokenService = jwtTokenService;
     }
-
+    @Transactional
     public void execute(String token, String newPassword) {
-        // Valida se o token é um token de redefinição de senha válido
+
         if (!jwtTokenService.isPasswordResetToken(token)) {
             throw new InvalidPasswordResetTokenException("Token fornecido não é um token de redefinição de senha!");
         }
