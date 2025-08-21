@@ -1,5 +1,6 @@
 package com.empacoters.antsback.identity.application.usecases;
 
+import com.empacoters.antsback.identity.application.exception.UserDoesNotExistException;
 import com.empacoters.antsback.identity.application.interfaces.Hasher;
 import com.empacoters.antsback.identity.domain.model.PasswordResetToken;
 import com.empacoters.antsback.identity.domain.model.User;
@@ -48,9 +49,8 @@ public class RequestPasswordResetUseCase {
 
     public void execute(String email) {
         User user = userRepository.findByEmail(new Email(email));
-
         if (user == null) {
-            return;
+            throw new UserDoesNotExistException("Não há nenhum usuário cadastrado com o e-mail informado");
         }
 
         passwordResetTokenRepository.deleteByUserId(user.id());
