@@ -110,6 +110,45 @@ sido bem-sucedido.
 | Código | Tipo HTTP      | Nome             | Descrição                                                                                                                                      |
 |:-------|:---------------|:-----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|
 | 401    | `UNAUTHORIZED` | `TOKEN_INVALIDO` | Ocorre caso o refreshToken passado seja completamente inválido, não esteja vinculado a um usuário na base de dados ou já tenha sido utilizado. |
+<br/>
+
+### POST `/auth/password/reset/request`
+Efetua a requisição ao sistema para enviar um e-mail com um link contendo um token para que o usuário possa
+redefinir a sua senha.
+
+#### Exemplo
+```json title="Corpo da requisição"
+{
+    "email": "francisco@example.com"
+}
+
+```
+
+#### Erros esperados
+| Código | Tipo HTTP   | Nome                 | Descrição                                                                         |
+|:-------|:------------|:---------------------|:----------------------------------------------------------------------------------|
+| 404    | `NOT_FOUND` | `USUARIO_NAO_EXISTE` | Ocorre caso o usuário com respectivo e-mail não seja encontrado na base de dados. |
+<br/>
+
+### POST `/auth/password/reset/confirm`
+Este endpoint recebe o token de redefinição de senha enviado ao e-mail do usuário e a nova senha desejada
+para confirmar a redefinição de senha.
+
+#### Exemplo
+```json title="Corpo da requisição"
+{
+  "token": "ifiemfsinawmjfao_skmdksadkwmdjsndiamskd",
+  "newPassword": "francisco123"
+}
+
+```
+
+#### Erros esperados
+| Código | Tipo HTTP     | Nome                         | Descrição                                                                 |
+|:-------|:--------------|:-----------------------------|:--------------------------------------------------------------------------|
+| 400    | `BAD_REQUEST` | `TOKEN_REDEFINICAO_INVALIDO` | Ocorre quando o token de redefinição de senha é verificado como inválido. |
+| 400    | `BAD_REQUEST` | `TOKEN_REDEFINICAO_EXPIRADO` | Ocorre quando o tempo de uso do token de redefinição de senha é excedido. |
+}
 
 ---
 
