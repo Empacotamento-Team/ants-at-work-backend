@@ -14,12 +14,15 @@ import com.empacoters.antsback.shared.vo.Email;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Base64;
 
 @Service
 public class JwtTokenService implements TokenService {
+    private static final SecureRandom random = new SecureRandom();
     private final Algorithm algorithm;
     private final JWTVerifier verifier;
     private final UserRepository userRepository;
@@ -59,29 +62,10 @@ public class JwtTokenService implements TokenService {
         }
     }
 
-    public String generatePasswordResetToken(User user) {
-        try {
-            Instant expiration = getPasswordResetExpirationDate();
-            return JWT.create()
-                    .withIssuer("auth-password-reset")
-                    .withSubject(user.email().address())
-                    .withClaim("type", "password-reset")
-                    .withExpiresAt(expiration)
-                    .sign(algorithm);
-        } catch (JWTCreationException exception) {
-            throw new RuntimeException("Erro ao gerar token de redefinição de senha.");
-        }
-    }
-
-    public boolean isPasswordResetToken(String token) {
-        try {
-            var jwt = verifier.verify(token);
-            String issuer = jwt.getIssuer();
-            String type = jwt.getClaim("type").asString();
-            return "auth-password-reset".equals(issuer) && "password-reset".equals(type);
-        } catch (JWTVerificationException e) {
-            return false;
-        }
+    public String generatePasswordResetToken(int length) {
+        byte[] bytes = new byte[length];
+        random.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
     @Override
@@ -105,10 +89,6 @@ public class JwtTokenService implements TokenService {
         } catch (JWTVerificationException e) {
             return null;
         }
-    }
-
-    private Instant getPasswordResetExpirationDate() {
-        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
     }
 
     private Instant getExpirationDate() {

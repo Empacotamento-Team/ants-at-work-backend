@@ -8,7 +8,6 @@ import com.empacoters.antsback.identity.domain.model.User;
 import com.empacoters.antsback.identity.domain.repository.PasswordResetTokenRepository;
 import com.empacoters.antsback.identity.domain.repository.RefreshTokenRepository;
 import com.empacoters.antsback.identity.domain.repository.UserRepository;
-import com.empacoters.antsback.identity.infrastructure.security.JwtTokenService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -18,28 +17,20 @@ public class ConfirmPasswordResetUseCase {
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final Hasher hasher;
-    private final JwtTokenService jwtTokenService;
 
     public ConfirmPasswordResetUseCase(
         PasswordResetTokenRepository passwordResetTokenRepository,
         UserRepository userRepository,
         RefreshTokenRepository refreshTokenRepository,
-        Hasher hasher,
-        JwtTokenService jwtTokenService
+        Hasher hasher
     ) {
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.hasher = hasher;
-        this.jwtTokenService = jwtTokenService;
     }
     @Transactional
     public void execute(String token, String newPassword) {
-
-        if (!jwtTokenService.isPasswordResetToken(token)) {
-            throw new InvalidPasswordResetTokenException("Token fornecido não é um token de redefinição de senha!");
-        }
-        
         String tokenHash = hasher.hashToken(token);
         
         var resetToken = passwordResetTokenRepository.findByTokenHash(tokenHash)

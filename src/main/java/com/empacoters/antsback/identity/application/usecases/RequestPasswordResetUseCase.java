@@ -54,7 +54,7 @@ public class RequestPasswordResetUseCase {
 
         passwordResetTokenRepository.deleteByUserId(user.id());
 
-        String token = jwtTokenService.generatePasswordResetToken(user);
+        String token = jwtTokenService.generatePasswordResetToken(32);
         String tokenHash = hasher.hashToken(token);
         Instant expiration = Instant.now().plus(1, ChronoUnit.HOURS); // 1 hora de validade
 
