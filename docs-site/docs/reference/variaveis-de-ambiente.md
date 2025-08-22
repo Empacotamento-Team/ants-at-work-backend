@@ -4,7 +4,8 @@ Documentação com todas as variáveis de ambiente usadas pelo backend.
 ## Variáveis Gerais
 Variáveis com escopo mais geral.
 
-* `SPRING_PROFILES_ACTIVE` Variável que define o ambiente do Spring. Por padrão: 'dev'.
+* `SPRING_PROFILES_ACTIVE` — Variável que define o ambiente do Spring. Por padrão: 'dev'.
+* `SERVER_PORT` — Porta em que o servidor Spring Boot executa. Por padrão: 8080.
 
 
 ## Variáveis de Segurança
