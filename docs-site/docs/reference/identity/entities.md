@@ -34,3 +34,17 @@ suas propriedades e métodos.
 | `userId`     | `Long`    | O id do usuário vinculado ao token.                                               |
 | `tokenHash`  | `String`  | O hash do token, garantindo a segurança.                                          |
 | `expiration` | `Instant` | O momento em que o token expira, no banco sendo salvo como 'AAAA-MM-DD HH:MM:ss'. |
+
+---
+
+## PasswordResetToken
+A entidade que representa o token de redefinição de senha. Ela é importante a partir do momento que ela armazena o
+hash do token e a data de expiração, proporcionando segurança e funcionalidade.
+
+### Propriedades
+| Nome         | Tipo      | Descrição                                                                         |
+|:-------------|:----------|:----------------------------------------------------------------------------------|
+| `id`         | `Long`    | O id do token de redefinição de senha.                                            |
+| `userId`     | `Long`    | O id do usuário vinculado ao token.                                               |
+| `tokenHash`  | `String`  | O hash do token, garantindo a segurança.                                          |
+| `expiration` | `Instant` | O momento em que o token expira, no banco sendo salvo como 'AAAA-MM-DD HH:MM:ss'. |

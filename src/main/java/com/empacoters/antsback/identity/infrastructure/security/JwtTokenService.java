@@ -14,19 +14,22 @@ import com.empacoters.antsback.shared.vo.Email;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Base64;
 
 @Service
 public class JwtTokenService implements TokenService {
+    private static final SecureRandom random = new SecureRandom();
     private final Algorithm algorithm;
     private final JWTVerifier verifier;
     private final UserRepository userRepository;
 
     public JwtTokenService(
-        @Value("${security.token.secret") String secret,
-        UserRepository userRepository
+            @Value("${security.token.secret}") String secret,
+            UserRepository userRepository
     ) {
         this.algorithm = Algorithm.HMAC256(secret);
         this.verifier = JWT.require(algorithm).build();
@@ -57,6 +60,12 @@ public class JwtTokenService implements TokenService {
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro ao gerar refresh token.");
         }
+    }
+
+    public String generatePasswordResetToken(int length) {
+        byte[] bytes = new byte[length];
+        random.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
     @Override
