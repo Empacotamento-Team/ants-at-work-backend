@@ -1,9 +1,15 @@
 package com.empacoters.antsback.identity.interfaces.rest;
 
 import com.empacoters.antsback.identity.application.usecases.*;
+import com.empacoters.antsback.identity.application.usecases.LoginUseCase;
+import com.empacoters.antsback.identity.application.usecases.LogoutUseCase;
+import com.empacoters.antsback.identity.application.usecases.RefreshTokenUseCase;
+import com.empacoters.antsback.identity.application.usecases.RegisterUseCase;
+import com.empacoters.antsback.identity.domain.model.User;
 import com.empacoters.antsback.identity.interfaces.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -41,8 +47,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequestDTO dto) {
-        var user = registerUseCase.execute(dto.name(), dto.email(), dto.password());
+    public ResponseEntity<Void> register(@AuthenticationPrincipal User userPrincipal, @RequestBody @Valid RegisterRequestDTO dto) {
+        var user = registerUseCase.execute(
+            dto.name(),
+            dto.email(),
+            dto.password(),
+            dto.role(),
+            userPrincipal.roles()
+        );
 
         URI location = URI.create("/users/" + user.id());
         return ResponseEntity.created(location).build();
