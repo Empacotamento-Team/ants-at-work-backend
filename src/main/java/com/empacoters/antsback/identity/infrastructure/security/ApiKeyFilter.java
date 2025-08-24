@@ -50,6 +50,8 @@ public class ApiKeyFilter extends OncePerRequestFilter {
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(UserRole.ADMIN.toAuthority()));
         var set = new HashSet<UserRole>();
         set.add(UserRole.ADMIN);
+        set.add(UserRole.MANAGER);
+
         var user = new User(0L, "AntsAtWorkSystem", new Email("antsatwork@work.com"), "osdkfjds",
                 set);
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, authorities);
