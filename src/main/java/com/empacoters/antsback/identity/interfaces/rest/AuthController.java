@@ -51,7 +51,6 @@ public class AuthController {
         var user = registerUseCase.execute(
             dto.name(),
             dto.email(),
-            dto.password(),
             dto.role(),
             userPrincipal.roles()
         );
