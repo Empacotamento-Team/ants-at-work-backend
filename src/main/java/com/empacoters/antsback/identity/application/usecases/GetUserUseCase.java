@@ -2,6 +2,7 @@ package com.empacoters.antsback.identity.application.usecases;
 
 import com.empacoters.antsback.identity.application.exception.UserDoesNotExistException;
 import com.empacoters.antsback.identity.domain.model.User;
+import com.empacoters.antsback.identity.domain.model.UserRole;
 import com.empacoters.antsback.identity.domain.repository.UserRepository;
 import com.empacoters.antsback.identity.interfaces.dto.UserDTO;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,6 @@ public class GetUserUseCase {
             throw new UserDoesNotExistException("Não foi possível encontrar este usuário.");
 
         User user = userRepository.findById(userId);
-        return new UserDTO(user.id(), user.name(), user.email().address());
+        return new UserDTO(user.id(), user.name(), user.email().address(), user.roles().toArray(new UserRole[0]));
     }
 }
