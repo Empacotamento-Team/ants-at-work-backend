@@ -7,6 +7,7 @@ import com.empacoters.antsback.identity.domain.repository.RefreshTokenRepository
 import com.empacoters.antsback.identity.domain.repository.UserRepository;
 import com.empacoters.antsback.shared.exception.BadRequestException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FirstAccessPasswordChangeUseCase {
@@ -24,6 +25,7 @@ public class FirstAccessPasswordChangeUseCase {
         this.hasher = hasher;
     }
 
+    @Transactional
     public void execute(User user, String newPassword) {
         if (!user.status().equals(UserStatus.PASSWORD_PENDING))
             throw new BadRequestException("Somente é permitido alterar a senha dessa forma em primeiros acessos!");
