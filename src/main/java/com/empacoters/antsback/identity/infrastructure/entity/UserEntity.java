@@ -1,11 +1,13 @@
 package com.empacoters.antsback.identity.infrastructure.entity;
 
 import com.empacoters.antsback.identity.domain.model.UserRole;
+import com.empacoters.antsback.identity.domain.model.UserStatus;
 import com.empacoters.antsback.shared.infrastructure.EmailEmbeddable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.Set;
 
@@ -29,6 +31,11 @@ public class UserEntity {
     private EmailEmbeddable email;
 
     private String passwordHash;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @ColumnDefault("'ACTIVE'")
+    private UserStatus status;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
