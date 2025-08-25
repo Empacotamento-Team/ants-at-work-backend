@@ -4,6 +4,7 @@ import com.empacoters.antsback.identity.application.exception.InvalidCredentials
 import com.empacoters.antsback.identity.application.interfaces.Hasher;
 import com.empacoters.antsback.identity.application.services.AuthTokenManager;
 import com.empacoters.antsback.identity.domain.model.User;
+import com.empacoters.antsback.identity.domain.model.UserStatus;
 import com.empacoters.antsback.identity.domain.repository.UserRepository;
 import com.empacoters.antsback.identity.interfaces.dto.LoginResponseDTO;
 import com.empacoters.antsback.shared.vo.Email;
@@ -32,6 +33,7 @@ public class LoginUseCase {
             throw new InvalidCredentialsException("Credenciais inválidas! Verifique o endereço de e-mail e a senha.");
 
         var tokens = tokenManager.generateTokens(user);
-        return new LoginResponseDTO(tokens.accessToken(), tokens.refreshToken());
+        var passwordChangeRequired = user.status().equals(UserStatus.PASSWORD_PENDING);
+        return new LoginResponseDTO(passwordChangeRequired, tokens.accessToken(), tokens.refreshToken());
     }
 }

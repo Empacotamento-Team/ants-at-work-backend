@@ -4,6 +4,7 @@ import com.empacoters.antsback.identity.application.exception.EmailAlreadyRegist
 import com.empacoters.antsback.identity.application.interfaces.Hasher;
 import com.empacoters.antsback.identity.domain.model.User;
 import com.empacoters.antsback.identity.domain.model.UserRole;
+import com.empacoters.antsback.identity.domain.model.UserStatus;
 import com.empacoters.antsback.identity.domain.repository.UserRepository;
 import com.empacoters.antsback.shared.application.services.EmailSender;
 import com.empacoters.antsback.shared.application.services.EmailTemplateRenderer;
@@ -74,7 +75,9 @@ public class RegisterUseCase {
             roles.add(UserRole.MANAGER);
         }
 
-        var user = userRepository.save(new User(null, name, emailObj, passwordHash, roles));
+        var user = userRepository.save(
+            new User(null, name, emailObj, passwordHash, UserStatus.PASSWORD_PENDING, roles)
+        );
         this.sendFirstAccessPasswordEmail(user.name(), user.email(), password);
         return user;
     }

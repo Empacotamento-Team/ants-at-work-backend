@@ -2,6 +2,7 @@ package com.empacoters.antsback.identity.infrastructure.security;
 
 import com.empacoters.antsback.identity.domain.model.User;
 import com.empacoters.antsback.identity.domain.model.UserRole;
+import com.empacoters.antsback.identity.domain.model.UserStatus;
 import com.empacoters.antsback.shared.vo.Email;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -52,8 +53,14 @@ public class ApiKeyFilter extends OncePerRequestFilter {
         set.add(UserRole.ADMIN);
         set.add(UserRole.MANAGER);
 
-        var user = new User(0L, "AntsAtWorkSystem", new Email("antsatwork@work.com"), "osdkfjds",
-                set);
+        var user = new User(
+            0L,
+            "AntsAtWorkSystem",
+            new Email("antsatwork@work.com"),
+            "osdkfjds",
+            UserStatus.ACTIVE,
+            set
+        );
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, authorities);
 
         SecurityContextHolder.getContext().setAuthentication(auth);
