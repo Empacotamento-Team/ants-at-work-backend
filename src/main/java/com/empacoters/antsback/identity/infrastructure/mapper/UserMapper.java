@@ -13,6 +13,7 @@ public class UserMapper {
                 user.name(),
                 EmailMapper.toEmbeddable(user.email()),
                 user.passwordHash(),
+                user.status(),
                 user.roles()
         );
     }
@@ -25,6 +26,7 @@ public class UserMapper {
                 userEntity.getName(),
                 EmailMapper.toDomain(userEntity.getEmail()),
                 userEntity.getPasswordHash(),
+                userEntity.getStatus(),
                 userEntity.getRoles()
         );
     }

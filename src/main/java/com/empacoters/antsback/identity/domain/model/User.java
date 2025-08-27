@@ -9,13 +9,15 @@ public class User {
     private String name;
     private Email email;
     private String passwordHash;
+    private UserStatus status;
     private Set<UserRole> roles;
 
-    public User(Long id, String name, Email email, String passwordHash, Set<UserRole> roles) {
+    public User(Long id, String name, Email email, String passwordHash, UserStatus status, Set<UserRole> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
+        this.status = status;
         this.roles = roles;
     }
 
@@ -53,6 +55,16 @@ public class User {
         if (newPasswordHash == null)
             throw new IllegalArgumentException("O password do usuário não pode ser nulo!");
         this.passwordHash = newPasswordHash;
+    }
+
+    // Status
+    public UserStatus status() {
+        return this.status;
+    }
+    public void changeStatus(UserStatus newStatus) {
+        if (newStatus == null)
+            throw new IllegalArgumentException("O status do usuário não pode ser nulo!");
+        this.status = newStatus;
     }
 
     // Roles

@@ -1,9 +1,15 @@
 package com.empacoters.antsback.identity.interfaces.rest;
 
 import com.empacoters.antsback.identity.application.usecases.*;
+import com.empacoters.antsback.identity.application.usecases.LoginUseCase;
+import com.empacoters.antsback.identity.application.usecases.LogoutUseCase;
+import com.empacoters.antsback.identity.application.usecases.RefreshTokenUseCase;
+import com.empacoters.antsback.identity.application.usecases.RegisterUseCase;
+import com.empacoters.antsback.identity.domain.model.User;
 import com.empacoters.antsback.identity.interfaces.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -15,6 +21,7 @@ public class AuthController {
     private final RegisterUseCase registerUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
     private final LogoutUseCase logoutUseCase;
+    private final FirstAccessPasswordChangeUseCase firstAccessPasswordChangeUseCase;
     private final RequestPasswordResetUseCase requestPasswordResetUseCase;
     private final ConfirmPasswordResetUseCase confirmPasswordResetUseCase;
 
@@ -23,6 +30,7 @@ public class AuthController {
         RegisterUseCase registerUseCase, 
         RefreshTokenUseCase refreshTokenUseCase, 
         LogoutUseCase logoutUseCase,
+        FirstAccessPasswordChangeUseCase firstAccessPasswordChangeUseCase,
         RequestPasswordResetUseCase requestPasswordResetUseCase,
         ConfirmPasswordResetUseCase confirmPasswordResetUseCase
     ) {
@@ -30,6 +38,7 @@ public class AuthController {
         this.registerUseCase = registerUseCase;
         this.refreshTokenUseCase = refreshTokenUseCase;
         this.logoutUseCase = logoutUseCase;
+        this.firstAccessPasswordChangeUseCase = firstAccessPasswordChangeUseCase;
         this.requestPasswordResetUseCase = requestPasswordResetUseCase;
         this.confirmPasswordResetUseCase = confirmPasswordResetUseCase;
     }
@@ -41,8 +50,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequestDTO dto) {
-        var user = registerUseCase.execute(dto.name(), dto.email(), dto.password());
+    public ResponseEntity<Void> register(@AuthenticationPrincipal User userPrincipal, @RequestBody @Valid RegisterRequestDTO dto) {
+        var user = registerUseCase.execute(
+            dto.name(),
+            dto.email(),
+            dto.role(),
+            userPrincipal.roles()
+        );
 
         URI location = URI.create("/users/" + user.id());
         return ResponseEntity.created(location).build();
@@ -57,6 +71,15 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody @Valid LogoutRequestDTO dto) {
         logoutUseCase.execute(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/password/first-access-change")
+    public ResponseEntity<Void> firstAccessPasswordChange(
+        @AuthenticationPrincipal User userPrincipal,
+        @RequestBody @Valid FirstAccessPasswordChangeDTO dto
+    ) {
+        firstAccessPasswordChangeUseCase.execute(userPrincipal, dto.newPassword());
         return ResponseEntity.ok().build();
     }
 

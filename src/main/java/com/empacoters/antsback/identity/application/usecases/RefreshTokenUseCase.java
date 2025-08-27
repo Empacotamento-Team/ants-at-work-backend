@@ -5,6 +5,7 @@ import com.empacoters.antsback.identity.application.exception.InvalidTokenExcept
 import com.empacoters.antsback.identity.application.exception.UserDoesNotExistException;
 import com.empacoters.antsback.identity.application.interfaces.Hasher;
 import com.empacoters.antsback.identity.application.services.AuthTokenManager;
+import com.empacoters.antsback.identity.domain.model.UserStatus;
 import com.empacoters.antsback.identity.domain.repository.RefreshTokenRepository;
 import com.empacoters.antsback.identity.domain.repository.UserRepository;
 import com.empacoters.antsback.identity.interfaces.dto.LoginResponseDTO;
@@ -45,6 +46,7 @@ public class RefreshTokenUseCase {
 
         refreshTokenRepository.deleteById(token.id());
         var newTokens = tokenManager.generateTokens(user);
-        return new LoginResponseDTO(newTokens.accessToken(), newTokens.refreshToken());
+        var passwordChangeRequired = user.status().equals(UserStatus.PASSWORD_PENDING);
+        return new LoginResponseDTO(passwordChangeRequired, newTokens.accessToken(), newTokens.refreshToken());
     }
 }

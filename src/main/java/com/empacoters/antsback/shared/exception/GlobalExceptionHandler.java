@@ -4,11 +4,38 @@ import com.empacoters.antsback.shared.dto.ApiError;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleForbidden(AccessDeniedException error) {
+        var status = HttpStatus.FORBIDDEN;
+        var apiError = new ApiError(
+            status.value(),
+            status.name(),
+            "ACESSO_NEGADO",
+            error.getMessage()
+        );
+
+        return ResponseEntity.status(status).body(apiError);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequest(BadRequestException e) {
+        var status = HttpStatus.BAD_REQUEST;
+        var apiError = new ApiError(
+            status.value(),
+            status.name(),
+            "REQUISICAO_MALFORMADA",
+            e.getMessage()
+        );
+
+        return ResponseEntity.status(status).body(apiError);
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(NotFoundException e) {
         var status = HttpStatus.NOT_FOUND;

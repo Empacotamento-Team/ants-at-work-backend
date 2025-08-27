@@ -12,6 +12,7 @@ se destaca todas as propriedades e métodos presentes no contexto de identidade.
 | `name`         | `String`        | O nome do usuário.                                                                                   |
 | `email`        | `Email`         | O e-mail do usuário.                                                                                 |
 | `passwordHash` | `String`        | O hash da senha do usuário, usado para comparação no login.                                          |
+| `status`       | `UserStatus`    | O status que o usuário possui: `ACTIVE`, `PASSWORD_PENDING` etc.                                     |
 | `roles`        | `Set<UserRole>` | Os cargos que o usuário possui, exemplo: 'Admin' etc.                                                |
 
 ### Métodos
@@ -20,6 +21,7 @@ se destaca todas as propriedades e métodos presentes no contexto de identidade.
 | `changeName(String newName)`                | `void`  | Altera o nome caso este seja válido e possua mais de 3 caracteres. |
 | `changeEmail(Email newEmail)`               | `void`  | Altera o e-mail caso este seja válido (não nulo).                  |
 | `changePasswordHash(String newPasswordHash` | `void`  | Altera o hash da senha caso este seja válido.                      |
+| `changeStatus(UserStatus newStatus)`        | `void`  | Altera o status do usuário em caso seja válido.                    |
 
 ---
 
