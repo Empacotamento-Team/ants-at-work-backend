@@ -10,12 +10,14 @@ Controlador responsável por gerenciar a autenticação de usuários no contexto
 
 ### POST `/auth/register`
 Registra um usuário no sistema, com base nos dados do corpo da requisição.
-- Autenticação: não é necessária.
 
-:::warning
+:::note
 
-A dinâmica de registro será alterada para permitir que somente administradores autenticados
-possam cadastrar novos usuários.
+Somente usuários com cargos de Administrador ou Gestor podem cadastrar novos usuários.
+Além disso, *somente administradores podem cadastrar outros administradores*. Os cargos existentes são:
+- Administrador;
+- Gestor;
+- e Operador.
 
 :::
 
@@ -23,19 +25,22 @@ possam cadastrar novos usuários.
 {
   "name": "Evelyn",
   "email": "evelyn@example.com",
-  "password": "potato123"
+  "role": "Gestor"
 }
 ```
 
 #### Erros esperados
-| Código | Tipo HTTP      | Nome                  | Descrição                                                                       |
-|:-------|:---------------|:----------------------|:--------------------------------------------------------------------------------|
-| 409    | `CONFLICT`     | `EMAIL_JA_CADASTRADO` | Ocorre caso o e-mail posto na requisição já esteja cadastrado na base de dados. |
-| 400    | `BAD_REQUEST`  | `EMAIL_INVALIDO`      | Ocorre caso o e-mail não esteja em um formato válido.                           |
+| Código | Tipo HTTP      | Nome                    | Descrição                                                                       |
+|:-------|:---------------|:------------------------|:--------------------------------------------------------------------------------|
+| 409    | `CONFLICT`     | `EMAIL_JA_CADASTRADO`   | Ocorre caso o e-mail posto na requisição já esteja cadastrado na base de dados. |
+| 403    | `FORBIDDEN`    | `ACESSO_NEGADO`         | Ocorre caso o usuário não tenha permissão para cadastrar o usuário.             |
+| 400    | `BAD_REQUEST`  | `EMAIL_INVALIDO`        | Ocorre caso o e-mail não esteja em um formato válido.                           |
+| 400    | `BAD_REQUEST`  | `REQUISICAO_MALFORMADA` | Ocorre caso o cargo seja inválido.                                              |
 <br/>
 
 ### POST `/auth/login`
-Efetua o login com base nas credenciais e retorna os tokens relevantes.
+Efetua o login com base nas credenciais e retorna os tokens relevantes. O campo `passwordChangeRequired`
+é verdadeiro quando o login realiza o primeiro login.
 
 #### Exemplo
 <Tabs>
@@ -50,6 +55,7 @@ Efetua o login com base nas credenciais e retorna os tokens relevantes.
     <TabItem value="Resposta">
         ```json
         {
+          "passwordChangeRequired": false,
           "accessToken": "eyj1poiafsdjlk23",
           "refreshToken": "ey121example09u4324"
         }
@@ -81,6 +87,7 @@ para mais segurança.
         ```json
         {
           // Note que é o mesmo formato de resposta do login.
+          "passwordChangeRequired": false,
           "accessToken": "eyj1poiafsdjlk23",
           "refreshToken": "ey121example09u4324"
         }
@@ -110,6 +117,23 @@ sido bem-sucedido.
 | Código | Tipo HTTP      | Nome             | Descrição                                                                                                                                      |
 |:-------|:---------------|:-----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|
 | 401    | `UNAUTHORIZED` | `TOKEN_INVALIDO` | Ocorre caso o refreshToken passado seja completamente inválido, não esteja vinculado a um usuário na base de dados ou já tenha sido utilizado. |
+<br/>
+
+### POST `/auth/password/first-access-change`
+Com base no usuário autenticado e na nova senha passada pelo corpo da requisição, o sistema realiza a alteração
+da senha para aqueles que estão acessando pela primeira vez.
+
+#### Exemplo
+```json title="Corpo da requisição"
+{
+    "newPassword": "soDk2n4fsdf2"
+}
+```
+
+#### Erros esperados
+| Código | Tipo HTTP     | Nome                         | Descrição                                                             |
+|:-------|:--------------|:-----------------------------|:----------------------------------------------------------------------|
+| 400    | `BAD_REQUEST` | `REQUISICAO_MALFORMADA`      | Ocorre quando o usuário tenta acessar essa rota mesmo não precisando. |
 <br/>
 
 ### POST `/auth/password/reset/request`
@@ -169,7 +193,8 @@ Busca as informações do usuário autenticado.
 {
   "id": 1,
   "name": "Joao",
-  "email": "joao@example.com"
+  "email": "joao@example.com",
+  "roles": ["Administrador", "Gestor"]
 }
 ```
 <br/>
@@ -186,7 +211,8 @@ GET http://ants-at-work-backend.example/users/3
 {
   "id": 3,
   "name": "Pedro",
-  "email": "pedro@example.com"
+  "email": "pedro@example.com",
+  "roles": ["Operador"]
 }
 ```
 
@@ -194,6 +220,28 @@ GET http://ants-at-work-backend.example/users/3
 | Código | Tipo HTTP   | Nome                 | Descrição                                                                     |
 |:-------|:------------|:---------------------|:------------------------------------------------------------------------------|
 | 404    | `NOT_FOUND` | `USUARIO_NAO_EXISTE` | Ocorre caso o usuário com respectiva id não seja encontrado na base de dados. |
+<br/>
+
+### GET `/users/roles`
+Busca os cargos e a possibilidade do usuário autenticado registrar um usuário com aquele nível ou não.
+
+#### Exemplo
+```http request title="Requisição HTTP"
+GET http://ants-at-work-backend.example/users/roles
+```
+
+```json title="Resposta"
+[
+  {
+    "name": "Administrador",
+    "canRegister": true
+  },
+  {
+    "name": "Gestor",
+    "canRegister": false
+  }
+]
+```
 <br/>
 
 ### DELETE `/users/:id`
