@@ -13,9 +13,7 @@ public interface TruckRepository {
 
     Truck byId(Long id);
 
-    void add(Truck truck);
-
-    void update(Truck truck);
+    Truck save(Truck truck);
 
     void delete(Long id);
 }
