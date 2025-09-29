@@ -1,11 +1,10 @@
 package com.empacoters.antsback.logistics.domain.model;
 
 
-import com.sun.tools.javac.Main;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class Truck{
@@ -66,20 +65,34 @@ public class Truck{
         maintenanceHistory.add(record);
     }
     public void update(
-            String plate,
-            Integer maximumCapacity,
-            Float internalVolume,
-            Set<TruckType> types,
-            TruckStatus status,
-            Float currentMileage,
-            String details
+            Optional<String> plate,
+            Optional<Integer> maximumCapacity,
+            Optional<Float> internalVolume,
+            Optional<Set<TruckType>> types,
+            Optional<TruckStatus> status,
+            Optional<Float> currentMileage,
+            Optional<String> details
     ) {
-        if (plate != null) this.plate = plate;
-        if (maximumCapacity != null) this.maximumCapacity = maximumCapacity;
-        if (internalVolume != null) this.internalVolume = internalVolume;
-        if (types != null) this.types = types;
-        if (status != null) this.status = status;
-        if (currentMileage != null) this.currentMileage = currentMileage;
-        if (details != null) this.details = details;
+        if (plate.isPresent()) {
+            this.plate = plate.get();
+        }
+        if (maximumCapacity.isPresent()) {
+            this.maximumCapacity = maximumCapacity.get();
+        }
+        if (internalVolume.isPresent()) {
+            this.internalVolume = internalVolume.get();
+        }
+        if (types.isPresent()) {
+            this.types = types.get();
+        }
+        if (status.isPresent()) {
+            this.status = status.get();
+        }
+        if (currentMileage.isPresent()) {
+            this.currentMileage = currentMileage.get();
+        }
+        if (details.isPresent()) {
+            this.details = details.get();
+        }
     }
 }

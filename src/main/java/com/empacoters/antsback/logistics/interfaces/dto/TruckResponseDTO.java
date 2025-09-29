@@ -1,6 +1,5 @@
 package com.empacoters.antsback.logistics.interfaces.dto;
 
-import com.empacoters.antsback.logistics.domain.model.MaintenanceRecord;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
 import com.empacoters.antsback.logistics.domain.model.TruckType;
 
@@ -8,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public record TruckDTO(
+public record TruckResponseDTO(
         Long id,
         String plate,
         Integer maximumCapacity,
@@ -18,6 +17,5 @@ public record TruckDTO(
         LocalDate lastRevision,
         Float currentMileage,
         String details,
-        List<MaintenanceRecord> maintenanceHistory
-
+        List<MaintenanceRecordDTO> maintenanceHistory
 ) { }

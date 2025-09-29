@@ -12,16 +12,29 @@ import java.util.Set;
 public class CreateTruckUseCase {
 
     private final TruckRepository truckRepository;
-
-    public CreateTruckUseCase(TruckRepository truckRepository) {
+    private final StartMaintenanceUseCase startMaintenanceUseCase;
+    public CreateTruckUseCase(TruckRepository truckRepository,StartMaintenanceUseCase startMaintenanceUseCase) {
 
         this.truckRepository = truckRepository;
+        this.startMaintenanceUseCase = startMaintenanceUseCase;
 
     }
 
-    public Truck execute(String plate, Integer maximumCapacity, Float internalVolume, Set<TruckType> types, TruckStatus status, Float currentMileage, String details)
+    public Truck execute(String plate, Integer maximumCapacity, Float internalVolume, Set<TruckType> types, TruckStatus status, Float currentMileage, String details, String maintenanceNote)
     {
-        TruckStatus initialStatus = (status != null) ? status : TruckStatus.AVAILABLE;
-        return truckRepository.save(new Truck(null, plate, maximumCapacity, internalVolume, types, initialStatus, null, currentMileage, details));
+        Truck truck = new Truck(null, plate, maximumCapacity, internalVolume, types, status, null, currentMileage, details);
+        Truck savedTruck = truckRepository.save(truck);
+        TruckStatus initialStatus;
+        if(status != null)
+        {
+            startMaintenanceUseCase.execute(savedTruck.id(), maintenanceNote);
+            initialStatus = status;
+        }
+        else
+        {
+            initialStatus = TruckStatus.AVAILABLE;
+        }
+
+        return savedTruck;
     }
 }
