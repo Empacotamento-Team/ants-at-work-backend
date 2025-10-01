@@ -17,8 +17,6 @@ public enum TruckType {
     @JsonValue
     public String description(){return this.description;}
 
-    public String toAuthority() { return "TYPE_" + name();}
-
     public static Optional<TruckType> fromDescription(String description) {
         for (TruckType type: values()){
             if(type.description.equalsIgnoreCase(description))
