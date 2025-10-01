@@ -1,13 +1,8 @@
 package com.empacoters.antsback.logistics.interfaces.rest;
 
-import com.empacoters.antsback.logistics.application.usecases.CreateTruckUseCase;
-import com.empacoters.antsback.logistics.application.usecases.DeleteTruckUseCase;
-import com.empacoters.antsback.logistics.application.usecases.GetTruckUseCase;
-import com.empacoters.antsback.logistics.application.usecases.UpdateTruckUseCase;
-import com.empacoters.antsback.logistics.domain.model.MaintenanceRecord;
+import com.empacoters.antsback.logistics.application.usecases.*;
 import com.empacoters.antsback.logistics.domain.model.Truck;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
-import com.empacoters.antsback.logistics.domain.repository.TruckRepository;
 import com.empacoters.antsback.logistics.interfaces.dto.MaintenanceRecordDTO;
 import com.empacoters.antsback.logistics.interfaces.dto.TruckCreateDTO;
 import com.empacoters.antsback.logistics.interfaces.dto.TruckResponseDTO;
@@ -25,17 +20,20 @@ import java.util.stream.Collectors;
 public class TruckController {
 
     private final GetTruckUseCase getTruckUseCase;
+    private final ListTrucksUseCase listTrucksUseCase;
     private final CreateTruckUseCase createTruckUseCase;
     private final UpdateTruckUseCase updateTruckUseCase;
     private final DeleteTruckUseCase deleteTruckUseCase;
 
     public TruckController(
             GetTruckUseCase getTruckUseCase,
+            ListTrucksUseCase listTrucksUseCase,
             CreateTruckUseCase createTruckUseCase,
             UpdateTruckUseCase updateTruckUseCase,
             DeleteTruckUseCase deleteTruckUseCase
     ) {
         this.getTruckUseCase = getTruckUseCase;
+        this.listTrucksUseCase = listTrucksUseCase;
         this.createTruckUseCase = createTruckUseCase;
         this.updateTruckUseCase = updateTruckUseCase;
         this.deleteTruckUseCase = deleteTruckUseCase;
@@ -47,7 +45,7 @@ public class TruckController {
             @RequestParam(required = false) Long fleetId,
             @RequestParam(required = false) TruckStatus status
     ) {
-        List<Truck> trucks = getTruckUseCase.execute(Optional.ofNullable(fleetId), Optional.ofNullable(status));
+        List<Truck> trucks = listTrucksUseCase.execute(Optional.ofNullable(fleetId), Optional.ofNullable(status));
 
         List<TruckResponseDTO> response = trucks.stream()
                 .map(this::toResponseDTO)
