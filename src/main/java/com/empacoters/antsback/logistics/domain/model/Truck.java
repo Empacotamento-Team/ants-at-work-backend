@@ -9,21 +9,21 @@ import java.util.Set;
 
 public class Truck{
     private final Long id;
-    private  String plate;
-    private  Integer maximumCapacity;
-    private  Float internalVolume;
-    private  Set<TruckType> types;
+    private String plate;
+    private Integer maximumCapacity;
+    private Dimensions internalDimensions;
+    private Set<TruckType> types;
     private TruckStatus status;
     private LocalDate lastRevision;
     private Float currentMileage;
     private String details;
     private List<MaintenanceRecord> maintenanceHistory;
 
-    public Truck(Long id, String plate, Integer maximumCapacity, Float internalVolume, Set<TruckType> types, TruckStatus status, LocalDate lastRevision, Float currentMileage, String details) {
+    public Truck(Long id, String plate, Integer maximumCapacity, Dimensions internalDimensions, Set<TruckType> types, TruckStatus status, LocalDate lastRevision, Float currentMileage, String details) {
         this.id = id;
         this.plate = plate;
         this.maximumCapacity = maximumCapacity;
-        this.internalVolume = internalVolume;
+        this.internalDimensions = internalDimensions;
         this.types = types;
         this.status = status;
         this.lastRevision = lastRevision;
@@ -36,9 +36,11 @@ public class Truck{
 
     public String plate() {return this.plate;}
 
-    public Integer maximumCapacity(){ return  this.maximumCapacity;}
+    public Integer maximumCapacity(){ return this.maximumCapacity;}
 
-    public Float internalVolume(){return this.internalVolume;}
+    public Dimensions internalDimensions() {
+        return this.internalDimensions;
+    }
 
     public Set<TruckType> types() {return this.types;}
 
@@ -67,7 +69,7 @@ public class Truck{
     public void update(
             Optional<String> plate,
             Optional<Integer> maximumCapacity,
-            Optional<Float> internalVolume,
+            Optional<Dimensions> internalDimensions,
             Optional<Set<TruckType>> types,
             Optional<TruckStatus> status,
             Optional<Float> currentMileage,
@@ -79,8 +81,8 @@ public class Truck{
         if (maximumCapacity.isPresent()) {
             this.maximumCapacity = maximumCapacity.get();
         }
-        if (internalVolume.isPresent()) {
-            this.internalVolume = internalVolume.get();
+        if (internalDimensions.isPresent()) {
+            this.internalDimensions = internalDimensions.get();
         }
         if (types.isPresent()) {
             this.types = types.get();

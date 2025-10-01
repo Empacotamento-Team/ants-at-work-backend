@@ -1,5 +1,6 @@
 package com.empacoters.antsback.logistics.application.usecases;
 
+import com.empacoters.antsback.logistics.domain.model.Dimensions;
 import com.empacoters.antsback.logistics.domain.model.Truck;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
 import com.empacoters.antsback.logistics.domain.model.TruckType;
@@ -20,10 +21,12 @@ public class CreateTruckUseCase {
 
     }
 
-    public Truck execute(String plate, Integer maximumCapacity, Float internalVolume, Set<TruckType> types, TruckStatus status, Float currentMileage, String details, String maintenanceNote)
+    public Truck execute(String plate, Integer maximumCapacity, Dimensions internalDimensions, Set<TruckType> types, TruckStatus status, Float currentMileage, String details, String maintenanceNote)
     {
-        Truck truck = new Truck(null, plate, maximumCapacity, internalVolume, types, status, null, currentMileage, details);
+        Truck truck = new Truck(null, plate, maximumCapacity, internalDimensions, types, status, null, currentMileage, details);
         Truck savedTruck = truckRepository.save(truck);
+
+        // TODO: completar lógica
         TruckStatus initialStatus;
         if(status != null)
         {

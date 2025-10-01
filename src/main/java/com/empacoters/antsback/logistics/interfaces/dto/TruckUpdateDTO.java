@@ -8,7 +8,9 @@ import java.util.Set;
 public record TruckUpdateDTO(
         String plate,
         Integer maximumCapacity,
-        Float internalVolume,
+        Double internalHeight,
+        Double internalWidth,
+        Double internalLength,
         Set<TruckType> types,
         TruckStatus status,
         Float currentMileage,

@@ -1,5 +1,6 @@
 package com.empacoters.antsback.logistics.application.usecases;
 
+import com.empacoters.antsback.logistics.domain.model.Dimensions;
 import com.empacoters.antsback.logistics.domain.model.Truck;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
 import com.empacoters.antsback.logistics.domain.model.TruckType;
@@ -21,11 +22,16 @@ public class UpdateTruckUseCase {
         this.finishMaintenanceUseCase = finishMaintenanceUseCase;
     }
 
-    public Truck execute(Long truckId, Optional<String> plate, Optional<Integer> maximumCapacity, Optional<Float> internalVolume, Optional<Set<TruckType>> types, Optional<TruckStatus> status, Optional<Float> currentMileage, Optional<String> details, Optional<String> maintenanceNote) {
+    public Truck execute(
+        Long truckId, Optional<String> plate, Optional<Integer> maximumCapacity,
+        Optional<Dimensions> internalDimensions, Optional<Set<TruckType>> types,
+        Optional<TruckStatus> status, Optional<Float> currentMileage,
+        Optional<String> details, Optional<String> maintenanceNote
+    ) {
         Truck truck = truckRepository.byId(truckId);
         if (truck == null) return null;
         TruckStatus oldStatus = truck.status();
-        truck.update(plate, maximumCapacity, internalVolume, types, status, currentMileage, details);
+        truck.update(plate, maximumCapacity, internalDimensions, types, status, currentMileage, details);
         if (status.isPresent() && oldStatus != status.get()) {
             if (status.get() == TruckStatus.UNDER_MAINTENANCE) {
                 startMaintenanceUseCase.execute(truck.id(), String.valueOf(maintenanceNote));

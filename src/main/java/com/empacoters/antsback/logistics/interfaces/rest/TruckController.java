@@ -1,6 +1,7 @@
 package com.empacoters.antsback.logistics.interfaces.rest;
 
 import com.empacoters.antsback.logistics.application.usecases.*;
+import com.empacoters.antsback.logistics.domain.model.Dimensions;
 import com.empacoters.antsback.logistics.domain.model.Truck;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
 import com.empacoters.antsback.logistics.interfaces.dto.MaintenanceRecordDTO;
@@ -70,7 +71,7 @@ public class TruckController {
         Truck created = createTruckUseCase.execute(
            dto.plate(),
            dto.maximumCapacity(),
-           dto.internalVolume(),
+           new Dimensions(dto.internalHeight(), dto.internalWidth(), dto.internalLength()),
            dto.types(),
            dto.status(),
            dto.currentMileage(),
@@ -85,10 +86,15 @@ public class TruckController {
     // PUT /trucks/{id}
     @PutMapping("/{id}")
     public ResponseEntity<TruckResponseDTO> updateTruck(@PathVariable Long id, @RequestBody TruckUpdateDTO dto) {
+        // TODO: Melhorar validação para edição de dimensões.
+        Dimensions newDimensions = null;
+        if (dto.internalHeight() != null && dto.internalLength() != null && dto.internalWidth() != null)
+            newDimensions = new Dimensions(dto.internalHeight(), dto.internalWidth(), dto.internalLength());
+
         Truck updated = updateTruckUseCase.execute(id,
                 Optional.ofNullable(dto.plate()),
                 Optional.ofNullable(dto.maximumCapacity()),
-                Optional.ofNullable(dto.internalVolume()),
+                Optional.ofNullable(newDimensions),
                 Optional.ofNullable(dto.types()),
                 Optional.ofNullable(dto.status()),
                 Optional.ofNullable(dto.currentMileage()),
@@ -114,7 +120,9 @@ public class TruckController {
                 truck.id(),
                 truck.plate(),
                 truck.maximumCapacity(),
-                truck.internalVolume(),
+                truck.internalDimensions().height(),
+                truck.internalDimensions().width(),
+                truck.internalDimensions().length(),
                 truck.types(),
                 truck.status(),
                 truck.lastRevision(),

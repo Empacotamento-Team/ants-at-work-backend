@@ -1,5 +1,6 @@
 package com.empacoters.antsback.logistics.infrastructure.entity;
 
+import com.empacoters.antsback.logistics.domain.model.Dimensions;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
 import com.empacoters.antsback.logistics.domain.model.TruckType;
 import jakarta.persistence.*;
@@ -31,8 +32,13 @@ public class TruckEntity {
     @Column(nullable = false)
     private Integer maximumCapacity;
 
-    @Column(nullable = false)
-    private Float internalVolume;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "height", column = @Column(name = "internal_height")),
+        @AttributeOverride(name = "width", column = @Column(name = "internal_width")),
+        @AttributeOverride(name = "length", column = @Column(name = "internal_length")),
+    })
+    private Dimensions internalDimensions;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
