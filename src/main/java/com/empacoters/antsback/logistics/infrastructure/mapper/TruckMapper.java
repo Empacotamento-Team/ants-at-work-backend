@@ -23,6 +23,7 @@ public class TruckMapper {
                 truck.lastRevision(),
                 truck.currentMileage(),
                 truck.details(),
+                null,
                 null
         );
 

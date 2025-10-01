@@ -65,4 +65,8 @@ public class TruckEntity {
 
     @OneToMany(mappedBy = "truck", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MaintenanceRecordEntity> maintenanceHistory = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "fleet_id")
+    private FleetEntity fleet;
 }

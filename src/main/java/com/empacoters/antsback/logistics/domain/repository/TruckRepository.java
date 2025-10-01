@@ -11,6 +11,8 @@ public interface TruckRepository  {
 
     List<Truck> byFleetIdAndStatus(Optional<Long> fleetId, Optional<TruckStatus> status);
 
+    List<Truck> fiveByFleetId(Long fleetId);
+
     Truck byId(Long id);
 
     Truck save(Truck truck);

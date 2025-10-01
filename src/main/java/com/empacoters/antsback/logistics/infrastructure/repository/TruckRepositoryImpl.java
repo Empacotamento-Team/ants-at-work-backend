@@ -50,6 +50,12 @@ public class TruckRepositoryImpl implements TruckRepository {
     }
 
     @Override
+    public List<Truck> fiveByFleetId(Long fleetId) {
+        var truckEntities = springDataTruckRepository.findFiveByFleetId(fleetId);
+        return truckEntities.stream().map(TruckMapper::toDomain).toList();
+    }
+
+    @Override
     public Truck byId(Long id) {
         var entity = springDataTruckRepository.findById(id).orElse(null);
         return TruckMapper.toDomain(entity);
