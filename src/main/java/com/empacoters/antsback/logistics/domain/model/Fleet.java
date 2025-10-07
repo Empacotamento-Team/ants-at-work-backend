@@ -1,6 +1,8 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Fleet {
     private Long id;
@@ -14,6 +16,7 @@ public class Fleet {
         this.name = nome;
         this.code = code;
         this.placeOfOperation = placeOfOperation;
+        this.trucks = new ArrayList<>(trucks.stream().filter(Objects::nonNull).toList());
     }
 
     public Long id() {
@@ -45,7 +48,42 @@ public class Fleet {
         return this.trucks;
     }
 
-    public void changeListOfTrucks(List<Truck> trucks) {
-        this.trucks = trucks;
+    public void addTruck(Truck truck) {
+        this.trucks.add(truck);
+        truck.changeFleet(this);
+    }
+
+    public Integer trucksCount() {
+        return this.trucks.size();
+    }
+
+    public Integer activeTrucksCount() {
+        int activeCount = 0;
+        for (Truck truck : trucks) {
+            if (truck.status() == TruckStatus.AVAILABLE)
+                activeCount += 1;
+        }
+        return activeCount;
+    }
+
+    public Integer underMaintenanceTrucksCount() {
+        int underMaintenanceCount = 0;
+        for (Truck truck : trucks) {
+            if (truck.status() == TruckStatus.UNDER_MAINTENANCE)
+                underMaintenanceCount += 1;
+        }
+        return underMaintenanceCount;
+    }
+
+    public double calculateAverageCapacity() {
+        if (trucksCount() == 0)
+            return 0;
+
+        double capacitySum = 0;
+        for (Truck truck : trucks) {
+            capacitySum += truck.maximumCapacity();
+        }
+
+        return capacitySum / trucks.size();
     }
 }

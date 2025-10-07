@@ -9,7 +9,6 @@ import io.micrometer.common.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -30,23 +29,40 @@ public class TruckRepositoryImpl implements TruckRepository {
     }
 
     @Override
-    public List<Truck> byFleetIdAndStatus(Optional<Long> fleetId, Optional<TruckStatus> status) {
-        if (fleetId.isEmpty() && status.isEmpty()) {
+    public List<Truck> byIdIn(List<Long> ids) {
+        return springDataTruckRepository.findByIdIn(ids)
+                .stream()
+                .map(TruckMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Truck> byFleetIdAndStatus(Long fleetId, TruckStatus status) {
+        if (fleetId == null && status == null) {
             return all();
         }
 
         List<TruckEntity> entities;
 
-        if (fleetId.isPresent() && status.isPresent()) {
-            entities = springDataTruckRepository.findByFleetIdAndStatus(fleetId.get(), status.get());
-        } else if (fleetId.isPresent()) {
-            entities = springDataTruckRepository.findByFleetId(fleetId.get());
+        if (fleetId != null && status != null) {
+            entities = springDataTruckRepository.findByFleetIdAndStatus(fleetId, status);
+        } else if (fleetId != null) {
+            entities = springDataTruckRepository.findByFleetId(fleetId);
         } else {
-            entities = springDataTruckRepository.findByStatus(status.get());
+            entities = springDataTruckRepository.findByStatus(status);
         }
 
         return entities.stream().map(TruckMapper::toDomain).collect(Collectors.toList());
+    }
 
+    @Override
+    public Integer countAllByFleetId(Long fleetId) {
+        return springDataTruckRepository.countAllByFleetId(fleetId);
+    }
+
+    @Override
+    public Integer countAllByFleetIdAndStatus(Long fleetId, TruckStatus status) {
+        return springDataTruckRepository.countAllByFleetIdAndStatus(fleetId, status);
     }
 
     @Override

@@ -7,7 +7,9 @@ import java.util.List;
 public interface FleetRepository {
     List<Fleet> listAll();
 
-    Fleet getById(Long id);
+    Fleet findById(Long id);
+
+    Fleet findByCode(String code);
 
     Fleet save(Fleet fleetToSave);
 

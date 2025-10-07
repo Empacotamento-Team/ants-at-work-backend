@@ -5,6 +5,9 @@ import com.empacoters.antsback.logistics.infrastructure.entity.FleetEntity;
 
 public class FleetMapper {
     public static FleetEntity toEntity(Fleet original) {
+        if (original == null)
+            return null;
+
         var convertedTrucks = original.listTrucks().stream().map(
             TruckMapper::toEntity
         ).toList();
@@ -19,6 +22,7 @@ public class FleetMapper {
     }
 
     public static Fleet toDomain(FleetEntity original) {
+        if (original == null) { return null; }
         var convertedTrucks = original.getTrucks().stream().map(
             TruckMapper::toDomain
         ).toList();

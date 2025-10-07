@@ -1,11 +1,11 @@
 package com.empacoters.antsback.logistics.interfaces.dto;
 
+import com.empacoters.antsback.logistics.domain.model.Truck;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
 import com.empacoters.antsback.logistics.domain.model.TruckType;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 public record TruckResponseDTO(
         Long id,
@@ -14,10 +14,27 @@ public record TruckResponseDTO(
         Double internalHeight,
         Double internalWidth,
         Double internalLength,
-        Set<TruckType> types,
+        TruckType type,
         TruckStatus status,
         LocalDate lastRevision,
-        Float currentMileage,
+        Double currentMileage,
         String details,
         List<MaintenanceRecordDTO> maintenanceHistory
-) { }
+) {
+    public static TruckResponseDTO fromTruck(Truck truck) {
+        return new TruckResponseDTO(
+            truck.id(),
+            truck.plate(),
+            truck.maximumCapacity(),
+            truck.internalDimensions().height(),
+            truck.internalDimensions().width(),
+            truck.internalDimensions().length(),
+            truck.type(),
+            truck.status(),
+            truck.lastRevision(),
+            truck.currentMileage(),
+            truck.details(),
+            truck.maintenanceHistory().stream().map(MaintenanceRecordDTO::fromRecord).toList()
+        );
+    }
+}

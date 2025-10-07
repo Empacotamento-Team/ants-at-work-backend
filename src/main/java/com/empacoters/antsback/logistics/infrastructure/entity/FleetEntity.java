@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "fleets")
@@ -25,5 +26,5 @@ public class FleetEntity {
     private String placeOfOperation;
 
     @OneToMany(mappedBy = "fleet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TruckEntity> trucks;
+    private List<TruckEntity> trucks = new ArrayList<>();
 }

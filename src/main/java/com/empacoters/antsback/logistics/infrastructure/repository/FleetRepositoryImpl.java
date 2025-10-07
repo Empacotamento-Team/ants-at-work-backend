@@ -23,7 +23,7 @@ public class FleetRepositoryImpl implements FleetRepository {
     }
 
     @Override
-    public Fleet getById(Long id) {
+    public Fleet findById(Long id) {
         var entity = this.springDataFleetRepository.findById(id).orElse(null);
         if (entity != null)
             return FleetMapper.toDomain(entity);
@@ -31,8 +31,24 @@ public class FleetRepositoryImpl implements FleetRepository {
     }
 
     @Override
+    public Fleet findByCode(String code) {
+        var entity = this.springDataFleetRepository.findByCodigo(code).orElse(null);
+        if (entity != null)
+            return FleetMapper.toDomain(entity);
+        return null;
+    }
+
+    @Override
     public Fleet save(Fleet fleetToSave) {
-        var fleetEntity = springDataFleetRepository.save(FleetMapper.toEntity(fleetToSave));
+        for (var a : fleetToSave.listTrucks()) {
+            System.out.println(a.id());
+        }
+
+        var b = FleetMapper.toEntity(fleetToSave);
+        for (var c: b.getTrucks()) {
+            System.out.println(c);
+        }
+        var fleetEntity = springDataFleetRepository.save(b);
         return FleetMapper.toDomain(fleetEntity);
     }
 

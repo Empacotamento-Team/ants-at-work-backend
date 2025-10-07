@@ -7,9 +7,6 @@ import com.empacoters.antsback.logistics.domain.model.TruckType;
 import com.empacoters.antsback.logistics.domain.repository.TruckRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Set;
-
 @Service
 public class UpdateTruckUseCase {
     private final TruckRepository truckRepository;
@@ -23,19 +20,19 @@ public class UpdateTruckUseCase {
     }
 
     public Truck execute(
-        Long truckId, Optional<String> plate, Optional<Integer> maximumCapacity,
-        Optional<Dimensions> internalDimensions, Optional<Set<TruckType>> types,
-        Optional<TruckStatus> status, Optional<Float> currentMileage,
-        Optional<String> details, Optional<String> maintenanceNote
+        Long truckId, String plate, Integer maximumCapacity,
+        Dimensions internalDimensions, TruckType type,
+        TruckStatus status, Double currentMileage,
+        String details, String maintenanceNote
     ) {
         Truck truck = truckRepository.byId(truckId);
         if (truck == null) return null;
         TruckStatus oldStatus = truck.status();
-        truck.update(plate, maximumCapacity, internalDimensions, types, status, currentMileage, details);
-        if (status.isPresent() && oldStatus != status.get()) {
-            if (status.get() == TruckStatus.UNDER_MAINTENANCE) {
+        truck.update(plate, maximumCapacity, internalDimensions, type, status, currentMileage, details, null);
+        if (status != null && oldStatus != status) {
+            if (status == TruckStatus.UNDER_MAINTENANCE) {
                 startMaintenanceUseCase.execute(truck.id(), String.valueOf(maintenanceNote));
-            } else if (status.get() == TruckStatus.AVAILABLE) {
+            } else if (status == TruckStatus.AVAILABLE) {
                 finishMaintenanceUseCase.execute(truck.id(), String.valueOf(maintenanceNote));
             }
         }

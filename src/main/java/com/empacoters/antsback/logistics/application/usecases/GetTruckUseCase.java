@@ -13,7 +13,6 @@ public class GetTruckUseCase {
         this.truckRepository = truckRepository;
     }
 
-
     public Truck execute(Long id) {
         return truckRepository.byId(id);
     }

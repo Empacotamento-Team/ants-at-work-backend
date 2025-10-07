@@ -13,7 +13,6 @@ import org.hibernate.annotations.ColumnDefault;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -40,27 +39,21 @@ public class TruckEntity {
     })
     private Dimensions internalDimensions;
 
-    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(
-            name = "truck_types",
-            joinColumns = @JoinColumn(name = "truck_id")
-    )
-    @Column(name = "type")
-    private Set<TruckType> types;
+    private TruckType type;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @ColumnDefault("'AVAILABLE'")
     private TruckStatus status;
 
-    @Column(name = "last_revision", nullable = false)
+    @Column(name = "last_revision")
     private LocalDate lastRevision;
 
     @Column(name = "current_mileage", nullable = false)
-    private Float currentMileage;
+    private Double currentMileage;
 
-    @Column(name = "details", nullable = false)
+    @Column(name = "details")
     private String details;
 
     @OneToMany(mappedBy = "truck", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -4,32 +4,32 @@ package com.empacoters.antsback.logistics.domain.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 public class Truck{
     private final Long id;
     private String plate;
     private Integer maximumCapacity;
     private Dimensions internalDimensions;
-    private Set<TruckType> types;
+    private TruckType type;
     private TruckStatus status;
     private LocalDate lastRevision;
-    private Float currentMileage;
+    private Double currentMileage;
     private String details;
     private List<MaintenanceRecord> maintenanceHistory;
+    private Fleet fleet;
 
-    public Truck(Long id, String plate, Integer maximumCapacity, Dimensions internalDimensions, Set<TruckType> types, TruckStatus status, LocalDate lastRevision, Float currentMileage, String details) {
+    public Truck(Long id, String plate, Integer maximumCapacity, Dimensions internalDimensions, TruckType type, TruckStatus status, LocalDate lastRevision, Double currentMileage, String details, Fleet fleet) {
         this.id = id;
         this.plate = plate;
         this.maximumCapacity = maximumCapacity;
         this.internalDimensions = internalDimensions;
-        this.types = types;
+        this.type = type;
         this.status = status;
         this.lastRevision = lastRevision;
         this.currentMileage = currentMileage;
         this.details = details;
         this.maintenanceHistory = new ArrayList<>();
+        this.fleet = fleet;
     }
 
     public Long id() {return this.id;}
@@ -42,17 +42,19 @@ public class Truck{
         return this.internalDimensions;
     }
 
-    public Set<TruckType> types() {return this.types;}
+    public TruckType type() {return this.type;}
 
     public TruckStatus status(){return this.status;}
 
     public LocalDate lastRevision(){return this.lastRevision;}
 
-    public Float currentMileage(){return this.currentMileage;}
+    public Double currentMileage(){return this.currentMileage;}
 
     public String details(){return this.details;}
 
     public List<MaintenanceRecord> maintenanceHistory(){return this.maintenanceHistory;}
+
+    public Fleet fleet(){return this.fleet;}
 
     public void changeTruckStatus(TruckStatus newStatus)
     {
@@ -66,35 +68,43 @@ public class Truck{
     {
         maintenanceHistory.add(record);
     }
+    public void changeFleet(Fleet newFleet) {
+        this.fleet = newFleet;
+    }
     public void update(
-            Optional<String> plate,
-            Optional<Integer> maximumCapacity,
-            Optional<Dimensions> internalDimensions,
-            Optional<Set<TruckType>> types,
-            Optional<TruckStatus> status,
-            Optional<Float> currentMileage,
-            Optional<String> details
+            String plate,
+            Integer maximumCapacity,
+            Dimensions internalDimensions,
+            TruckType type,
+            TruckStatus status,
+            Double currentMileage,
+            String details,
+            Fleet fleet
     ) {
-        if (plate.isPresent()) {
-            this.plate = plate.get();
+        if (plate != null && !plate.isEmpty()) {
+            this.plate = plate;
         }
-        if (maximumCapacity.isPresent()) {
-            this.maximumCapacity = maximumCapacity.get();
+        if (maximumCapacity != null && maximumCapacity > 0) {
+            this.maximumCapacity = maximumCapacity;
         }
-        if (internalDimensions.isPresent()) {
-            this.internalDimensions = internalDimensions.get();
+        if (internalDimensions != null) {
+            this.internalDimensions = internalDimensions();
         }
-        if (types.isPresent()) {
-            this.types = types.get();
+        if (type != null) {
+            this.type = type;
         }
-        if (status.isPresent()) {
-            this.status = status.get();
+        if (status != null) {
+            this.status = status;
         }
-        if (currentMileage.isPresent()) {
-            this.currentMileage = currentMileage.get();
+        if (currentMileage != null) {
+            this.currentMileage = currentMileage;
         }
-        if (details.isPresent()) {
-            this.details = details.get();
+        if (details != null) {
+            this.details = details;
+        }
+
+        if (fleet != null) {
+            this.fleet = fleet;
         }
     }
 }

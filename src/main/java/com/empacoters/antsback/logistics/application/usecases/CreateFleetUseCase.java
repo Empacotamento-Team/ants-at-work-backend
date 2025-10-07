@@ -4,6 +4,7 @@ import com.empacoters.antsback.logistics.domain.model.Fleet;
 import com.empacoters.antsback.logistics.domain.model.Truck;
 import com.empacoters.antsback.logistics.domain.repository.FleetRepository;
 import com.empacoters.antsback.logistics.domain.repository.TruckRepository;
+import com.empacoters.antsback.shared.exception.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -19,10 +20,14 @@ public class CreateFleetUseCase {
         this.fleetRepository = fleetRepository;
     }
 
-    public void execute(String fleetName, String fleetCode, String placeOfOperation, Long[] trucksIds) {
-        List<Truck> trucks = Arrays.stream(trucksIds).map(truckRepository::byId).toList();
+    public Fleet execute(String fleetName, String fleetCode, String placeOfOperation, Long[] trucksIds) {
+        if (fleetRepository.findByCode(fleetCode) != null) {
+            throw new BadRequestException("Uma frota de código \"" + fleetCode + "\" já existe");
+        }
+
+        List<Truck> trucks = trucksIds != null ? Arrays.stream(trucksIds).map(truckRepository::byId).toList() : null;
         Fleet newFleet = new Fleet(null, fleetName, fleetCode, placeOfOperation, trucks);
 
-        fleetRepository.save(newFleet);
+        return fleetRepository.save(newFleet);
     }
 }
