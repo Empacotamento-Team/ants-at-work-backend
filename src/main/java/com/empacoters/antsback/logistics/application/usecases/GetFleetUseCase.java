@@ -24,9 +24,9 @@ public class GetFleetUseCase {
             throw new NotFoundException("Não foi possível encontrar a frota solicitada");
         }
 
-        int trucksQuantity = 0;
-        int activeTrucks = 0;
-        int underMaintenanceTrucks = truckRepository.countAllByFleetIdAndStatus(fleet.id(), TruckStatus.UNDER_MAINTENANCE);
+        int trucksQuantity = truckRepository.countAllByFleetId(fleetId);
+        int activeTrucks = truckRepository.countAllByFleetIdAndStatus(fleetId, TruckStatus.AVAILABLE);
+        int underMaintenanceTrucks = truckRepository.countAllByFleetIdAndStatus(fleetId, TruckStatus.UNDER_MAINTENANCE);
 
         return new FleetResponseDTO(
             fleet.id(),
