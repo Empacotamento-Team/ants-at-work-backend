@@ -22,6 +22,8 @@ public record TruckResponseDTO(
         List<MaintenanceRecordDTO> maintenanceHistory
 ) {
     public static TruckResponseDTO fromTruck(Truck truck) {
+        if (truck == null)
+            return null;
         return new TruckResponseDTO(
             truck.id(),
             truck.plate(),

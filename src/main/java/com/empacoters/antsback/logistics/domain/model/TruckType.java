@@ -15,7 +15,9 @@ public enum TruckType {
     }
 
     @JsonValue
-    public String description(){return this.description;}
+    public String description(){
+        return this.description;
+    }
 
     public static Optional<TruckType> fromDescription(String description) {
         for (TruckType type: values()){

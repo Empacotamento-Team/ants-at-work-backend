@@ -16,6 +16,8 @@ public interface TruckRepository  {
 
     Truck byId(Long id);
 
+    Truck byPlate(String plate);
+
     Integer countAllByFleetId(Long fleetId);
 
     Integer countAllByFleetIdAndStatus(Long fleetId, TruckStatus status);
