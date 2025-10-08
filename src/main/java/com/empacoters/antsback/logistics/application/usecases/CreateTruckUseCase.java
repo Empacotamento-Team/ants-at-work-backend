@@ -5,6 +5,7 @@ import com.empacoters.antsback.logistics.domain.model.Truck;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
 import com.empacoters.antsback.logistics.domain.model.TruckType;
 import com.empacoters.antsback.logistics.domain.repository.TruckRepository;
+import com.empacoters.antsback.shared.exception.BadRequestException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +22,16 @@ public class CreateTruckUseCase {
 
     public Truck execute(String plate, Integer maximumCapacity, Dimensions internalDimensions, TruckType type, TruckStatus status, Double currentMileage, String details, String maintenanceNote)
     {
-        Truck truck = new Truck(null, plate, maximumCapacity, internalDimensions, type, status, null, currentMileage, details, null);
+        var existingTruck = truckRepository.byPlate(plate);
+        if (existingTruck != null) {
+            throw new BadRequestException("Um caminhão com essa placa já foi cadastrado");
+        }
+        Truck truck = new Truck(
+            null, plate, maximumCapacity,
+            internalDimensions, type, status,
+            null, currentMileage, details,
+            null
+        );
         Truck savedTruck = truckRepository.save(truck);
 
         // TODO: completar lógica

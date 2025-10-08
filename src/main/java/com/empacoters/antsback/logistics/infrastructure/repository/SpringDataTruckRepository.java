@@ -23,4 +23,6 @@ public interface SpringDataTruckRepository extends JpaRepository<TruckEntity, Lo
     Integer countAllByFleetId(Long fleetId);
 
     Integer countAllByFleetIdAndStatus(Long fleetId, TruckStatus status);
+
+    List<TruckEntity> findByPlate(String plate);
 }

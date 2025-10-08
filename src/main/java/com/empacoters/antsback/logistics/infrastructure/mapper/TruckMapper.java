@@ -18,12 +18,13 @@ public class TruckMapper {
 
         TruckEntity truckEntity = new TruckEntity();
         truckEntity.setId(truck.id());
-        if (truck.fleet().id() != null) {
+        if (truck.fleet() != null) {
             FleetEntity fleetEntity = new FleetEntity();
             fleetEntity.setId(truck.fleet().id());
             truckEntity.setFleet(fleetEntity);
         }
         truckEntity.setPlate(truck.plate());
+        truckEntity.setType(truck.type());
         truckEntity.setMaximumCapacity(truck.maximumCapacity());
         truckEntity.setInternalDimensions(truck.internalDimensions());
         truckEntity.setStatus(truck.status());

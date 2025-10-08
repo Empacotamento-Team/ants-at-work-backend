@@ -78,6 +78,16 @@ public class TruckRepositoryImpl implements TruckRepository {
     }
 
     @Override
+    public Truck byPlate(String plate) {
+        var truck = springDataTruckRepository.findByPlate(plate);
+        if (truck == null || truck.isEmpty()) {
+            return null;
+        }
+
+        return TruckMapper.toDomain(truck.getFirst());
+    }
+
+    @Override
     @NonNull
     public Truck save(@NonNull Truck truck) {
         var savedTruck = springDataTruckRepository.save(TruckMapper.toEntity(truck));
