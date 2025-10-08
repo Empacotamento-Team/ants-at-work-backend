@@ -2,6 +2,7 @@ package com.empacoters.antsback.logistics.infrastructure.repository;
 
 import com.empacoters.antsback.logistics.domain.model.Fleet;
 import com.empacoters.antsback.logistics.domain.repository.FleetRepository;
+import com.empacoters.antsback.logistics.infrastructure.entity.TruckEntity;
 import com.empacoters.antsback.logistics.infrastructure.mapper.FleetMapper;
 import org.springframework.stereotype.Repository;
 
@@ -10,9 +11,11 @@ import java.util.List;
 @Repository
 public class FleetRepositoryImpl implements FleetRepository {
     private final SpringDataFleetRepository springDataFleetRepository;
+    private final SpringDataTruckRepository springDataTruckRepository;
 
-    public FleetRepositoryImpl(SpringDataFleetRepository fleetRepository) {
+    public FleetRepositoryImpl(SpringDataFleetRepository fleetRepository, SpringDataTruckRepository springDataTruckRepository) {
         this.springDataFleetRepository = fleetRepository;
+        this.springDataTruckRepository = springDataTruckRepository;
     }
 
     @Override
@@ -40,15 +43,16 @@ public class FleetRepositoryImpl implements FleetRepository {
 
     @Override
     public Fleet save(Fleet fleetToSave) {
-        for (var a : fleetToSave.listTrucks()) {
-            System.out.println(a.id());
+        var fleet = FleetMapper.toEntity(fleetToSave);
+        var fleetTrucksIds = fleet.getTrucks().stream().map(TruckEntity::getId).toList();
+
+        if (fleet.getTrucks() != null) {
+            List<TruckEntity> trucks = springDataTruckRepository.findByIdIn(fleetTrucksIds);
+            trucks.forEach(truck -> truck.setFleet(fleet));
+            fleet.setTrucks(trucks);
         }
 
-        var b = FleetMapper.toEntity(fleetToSave);
-        for (var c: b.getTrucks()) {
-            System.out.println(c);
-        }
-        var fleetEntity = springDataFleetRepository.save(b);
+        var fleetEntity = springDataFleetRepository.save(fleet);
         return FleetMapper.toDomain(fleetEntity);
     }
 

@@ -1,16 +1,14 @@
 package com.empacoters.antsback.logistics.interfaces.rest;
 
 import com.empacoters.antsback.logistics.application.usecases.*;
-import com.empacoters.antsback.logistics.interfaces.dto.AddTruckToFleetDTO;
-import com.empacoters.antsback.logistics.interfaces.dto.FleetCreateDTO;
-import com.empacoters.antsback.logistics.interfaces.dto.FleetResponseDTO;
-import com.empacoters.antsback.logistics.interfaces.dto.FleetUpdateDTO;
+import com.empacoters.antsback.logistics.interfaces.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/fleets")
@@ -20,6 +18,7 @@ public class FleetController {
     private final CreateFleetUseCase createFleetUseCase;
     private final UpdateFleetUseCase updateFleetUseCase;
     private final GetFleetUseCase getFleetUseCase;
+    private final RemoveTruckFromFleetUseCase removeTruckFromFleetUseCase;
     private final DeleteFleetUseCase deleteFleetUseCase;
 
     public FleetController(
@@ -28,6 +27,7 @@ public class FleetController {
             CreateFleetUseCase createFleetUseCase,
             UpdateFleetUseCase updateFleetUseCase,
             GetFleetUseCase getFleetUseCase,
+            RemoveTruckFromFleetUseCase removeTrucksFromFleetUseCase,
             DeleteFleetUseCase deleteFleetUseCase
     ) {
         this.listFleetsUseCase = listFleetsUseCase;
@@ -35,6 +35,7 @@ public class FleetController {
         this.createFleetUseCase = createFleetUseCase;
         this.updateFleetUseCase = updateFleetUseCase;
         this.getFleetUseCase = getFleetUseCase;
+        this.removeTruckFromFleetUseCase = removeTrucksFromFleetUseCase;
         this.deleteFleetUseCase = deleteFleetUseCase;
     }
 
@@ -69,6 +70,14 @@ public class FleetController {
     public ResponseEntity<Void> assignTrucks(@PathVariable Long id, @RequestBody AddTruckToFleetDTO addTruckToFleetDTO) {
         this.addTrucksToFleetUseCase.execute(id, addTruckToFleetDTO.trucksIds());
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/trucks")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<Void> deleteTrucks(@PathVariable Long id, @RequestBody DeleteTruckFromFleetDTO deleteTruckFromFleetDTO) {
+        System.out.println(Arrays.toString(deleteTruckFromFleetDTO.truckIds()));
+        this.removeTruckFromFleetUseCase.execute(id, deleteTruckFromFleetDTO.truckIds());
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

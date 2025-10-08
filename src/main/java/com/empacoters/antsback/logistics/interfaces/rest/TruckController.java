@@ -44,9 +44,10 @@ public class TruckController {
     @GetMapping
     public ResponseEntity<List<TruckResponseDTO>> getAllTrucks(
             @RequestParam(required = false) Long fleetId,
-            @RequestParam(required = false) TruckStatus status
+            @RequestParam(required = false) String status
     ) {
-        List<Truck> trucks = listTrucksUseCase.execute(fleetId, status);
+        var truckStatus = TruckStatus.fromDescription(status).orElse(null);
+        List<Truck> trucks = listTrucksUseCase.execute(fleetId, truckStatus);
 
         List<TruckResponseDTO> response = trucks.stream()
                 .map(TruckResponseDTO::fromTruck)
