@@ -36,6 +36,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(apiError);
     }
 
+    @ExceptionHandler(com.empacoters.antsback.shared.exception.NotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(com.empacoters.antsback.shared.exception.NotFoundException e) {
+        var status = HttpStatus.NOT_FOUND;
+        var apiError = new ApiError(
+                status.value(),
+                status.name(),
+                "NAO_ENCONTRADO",
+                e.getMessage()
+        );
+
+        return ResponseEntity.status(status).body(apiError);
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(NotFoundException e) {
         var status = HttpStatus.NOT_FOUND;
@@ -72,6 +85,7 @@ public class GlobalExceptionHandler {
                 "Um erro inesperado aconteceu: " + e.getMessage()
         );
 
+        e.printStackTrace();
         return ResponseEntity.status(status).body(apiError);
     }
 }
