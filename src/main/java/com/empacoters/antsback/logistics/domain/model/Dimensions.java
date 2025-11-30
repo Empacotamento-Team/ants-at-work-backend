@@ -10,9 +10,9 @@ public class Dimensions {
     private Double length;
 
     public Dimensions(Double height, Double width, Double length) {
-        this.height = validateHeight(height);
-        this.width = validateWidth(width);
-        this.length = validateLength(length);
+        this.height = height;
+        this.width = width;
+        this.length = length;
     }
 
     public Dimensions() {

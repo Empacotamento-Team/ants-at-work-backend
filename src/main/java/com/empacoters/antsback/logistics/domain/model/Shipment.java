@@ -1,17 +1,18 @@
 package com.empacoters.antsback.logistics.domain.model;
 
-import java.util.Date;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Shipment {
     private final Long id;
     private List<Load> loads;
-    private Date date;
+    private Instant createdAt;
 
-    public Shipment(Long id, List<Load> loads, Date date) {
+    public Shipment(Long id, List<Load> loads, Instant createdAt) {
         this.id = id;
-        this.loads = validateLoads(loads);
-        this.date = validateDate(date);
+        this.loads = loads == null ? new ArrayList<>() : loads;
+        this.createdAt = createdAt;
     }
 
     public Long id() {
@@ -24,12 +25,16 @@ public class Shipment {
     public void changeLoads(List<Load> loads) {
         this.loads = validateLoads(loads);
     }
+    public void addLoad(Load load) {
+        if (load == null)
+            throw new IllegalArgumentException("load is null");
 
-    public Date date() {
-        return date;
+        load.changeShipmentId(this.id);
+        loads.add(load);
     }
-    public void changeDate(Date date) {
-        this.date = validateDate(date);
+
+    public Instant createdAt() {
+        return createdAt;
     }
 
     // Validations
@@ -39,7 +44,7 @@ public class Shipment {
         return loads;
     }
 
-    private Date validateDate(Date date) {
+    private Instant validateDate(Instant date) {
         if (date == null)
             throw new IllegalArgumentException("A data da carga total não pode ser nula");
         return date;
