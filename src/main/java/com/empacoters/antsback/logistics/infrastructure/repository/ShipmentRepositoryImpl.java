@@ -4,7 +4,8 @@ import com.empacoters.antsback.logistics.domain.model.Shipment;
 import com.empacoters.antsback.logistics.domain.repository.ShipmentRepository;
 import com.empacoters.antsback.logistics.infrastructure.mapper.ShipmentMapper;
 import org.springframework.stereotype.Repository;
-import java.util.Date;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +32,8 @@ public class ShipmentRepositoryImpl implements ShipmentRepository {
     }
 
     @Override
-    public List<Shipment> findByDateRange(Date startDate, Date endDate) {
-        return springDataShipmentRepository.findByDateBetween(startDate, endDate)
+    public List<Shipment> findByDateRange(Instant startDate, Instant endDate) {
+        return springDataShipmentRepository.findByCreatedAtBetween(startDate, endDate)
                 .stream()
                 .map(ShipmentMapper::toDomain)
                 .collect(Collectors.toList());

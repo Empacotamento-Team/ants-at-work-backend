@@ -6,7 +6,7 @@ import com.empacoters.antsback.logistics.domain.model.Shipment;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -34,8 +34,8 @@ public class ShipmentController {
 
     @GetMapping("/by-date-range")
     public List<Shipment> getByDateRange(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Instant startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Instant endDate) {
         return listShipmentsUseCase.byDateRange(startDate, endDate);
     }
 }

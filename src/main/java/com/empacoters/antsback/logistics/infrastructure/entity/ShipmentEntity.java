@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Entity(name = "shipments")
@@ -21,5 +21,6 @@ public class ShipmentEntity {
     private List<LoadEntity> loads;
 
     @Column(nullable = false)
-    private Date date;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant createdAt;
 }

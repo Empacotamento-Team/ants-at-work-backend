@@ -3,7 +3,8 @@ package com.empacoters.antsback.logistics.application.usecases;
 import com.empacoters.antsback.logistics.domain.model.Shipment;
 import com.empacoters.antsback.logistics.domain.repository.ShipmentRepository;
 import org.springframework.stereotype.Service;
-import java.util.Date;
+
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -18,7 +19,7 @@ public class ListShipmentsUseCase {
         return shipmentRepository.findAll();
     }
 
-    public List<Shipment> byDateRange(Date startDate, Date endDate) {
+    public List<Shipment> byDateRange(Instant startDate, Instant endDate) {
         return shipmentRepository.findByDateRange(startDate, endDate);
     }
 }
