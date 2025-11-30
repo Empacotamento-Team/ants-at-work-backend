@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity(name = "packages")
 @Data
 @NoArgsConstructor
@@ -24,13 +22,17 @@ public class PackageEntity {
     @JoinColumn(name = "load_id")
     private LoadEntity load;
 
-    @ManyToMany
-    @JoinTable(
-        name = "product_package",
-        joinColumns = @JoinColumn(name = "package_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<ProductEntity> products;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private ProductEntity product;
 
     private Double supportedWeight;
+
+    private Double xPosition;
+
+    private Double yPosition;
+
+    private Double zPosition;
+
+    private String orientation;
 }

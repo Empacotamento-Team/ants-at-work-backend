@@ -2,7 +2,7 @@ package com.empacoters.antsback.logistics.interfaces.dto;
 
 public record OptimizerContainerResponseDTO (
     Integer id_container,
-    OptimizerItemResponseDTO itens,
+    OptimizerItemResponseDTO[] itens,
     Integer num_itens,
     Double[] familias_presentes,
     Double peso_total_alocado,

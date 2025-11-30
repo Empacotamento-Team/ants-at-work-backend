@@ -7,12 +7,26 @@ public class Load {
     private Long shipmentId;
     private Truck relatedTruck;
     private List<Package> packages;
+    private Double totalAllocatedWeight;
+    private Double remainingWeight;
+    private Double totalAllocatedVolume;
+    private Double volumeOccupationPercentage;
+    private Double xPosition;
+    private Double yPosition;
+    private Double zPosition;
 
-    public Load(Long id, Long shipmentId, Truck relatedTruck, List<Package> packages) {
+    public Load(Long id, Long shipmentId, Truck relatedTruck, List<Package> packages, Double totalAllocatedWeight, Double remainingWeight, Double totalAllocatedVolume, Double xPosition, Double yPosition, Double zPosition) {
         this.id = id;
         this.shipmentId = shipmentId;
         this.relatedTruck = validateTruck(relatedTruck);
         this.packages = validatePackages(packages);
+        this.totalAllocatedWeight = totalAllocatedWeight;
+        this.remainingWeight = remainingWeight;
+        this.totalAllocatedVolume = totalAllocatedVolume;
+        this.volumeOccupationPercentage = totalAllocatedVolume / totalAllocatedWeight;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.zPosition = zPosition;
     }
 
     public Long id() {
@@ -41,6 +55,62 @@ public class Load {
 
     public void changePackages(List<Package> packages) {
         this.packages = validatePackages(packages);
+    }
+
+    public Double totalAllocatedWeight() {
+        return totalAllocatedWeight;
+    }
+
+    public void changeTotalAllocatedWeight(Double totalAllocatedWeight) {
+        this.totalAllocatedWeight = totalAllocatedWeight;
+    }
+
+    public Double remainingWeight() {
+        return remainingWeight;
+    }
+
+    public void changeRemainingWeight(Double remainingWeight) {
+        this.remainingWeight = remainingWeight;
+    }
+
+    public Double totalAllocatedVolume() {
+        return totalAllocatedVolume;
+    }
+
+    public void changeTotalAllocatedVolume(Double totalAllocatedVolume) {
+        this.totalAllocatedVolume = totalAllocatedVolume;
+    }
+
+    public Double volumeOccupationPercentage() {
+        return volumeOccupationPercentage;
+    }
+
+    public void changeVolumeOccupationPercentage(Double volumeOccupationPercentage) {
+        this.volumeOccupationPercentage = volumeOccupationPercentage;
+    }
+
+    public Double xPosition() {
+        return xPosition;
+    }
+
+    public void changeXPosition(Double xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public Double yPosition() {
+        return yPosition;
+    }
+
+    public void changeYPosition(Double yPosition) {
+        this.yPosition = yPosition;
+    }
+
+    public Double zPosition() {
+        return zPosition;
+    }
+
+    public void changeZPosition(Double zPosition) {
+        this.zPosition = zPosition;
     }
 
     // Validations

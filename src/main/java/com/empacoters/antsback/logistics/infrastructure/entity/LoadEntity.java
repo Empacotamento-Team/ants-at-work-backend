@@ -16,6 +16,20 @@ public class LoadEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Double totalAllocatedWeight;
+
+    private Double remainingWeight;
+
+    private Double totalAllocatedVolume;
+
+    private Double volumeOccupationPercentage;
+
+    private Double xPosition;
+
+    private Double yPosition;
+
+    private Double zPosition;
+
     @ManyToOne
     @JoinColumn(name = "truck_id")
     private TruckEntity relatedTruck;
@@ -24,6 +38,6 @@ public class LoadEntity {
     @JoinColumn(name = "shipment_id")
     private ShipmentEntity shipment;
 
-    @OneToMany(mappedBy = "load", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "load", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<PackageEntity> packages;
 }

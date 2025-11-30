@@ -1,27 +1,47 @@
 package com.empacoters.antsback.logistics.infrastructure.mapper;
 
 import com.empacoters.antsback.logistics.domain.model.Package;
+import com.empacoters.antsback.logistics.infrastructure.entity.LoadEntity;
 import com.empacoters.antsback.logistics.infrastructure.entity.PackageEntity;
-
-import java.util.stream.Collectors;
 
 public class PackageMapper {
     public static Package toDomain(PackageEntity packageEntity) {
+        if (packageEntity == null)
+            return null;
+
+        var packageLoad = packageEntity.getLoad();
+
         return new Package(
             packageEntity.getId(),
+            packageLoad != null ? packageLoad.getId() : null,
             PackagingMapper.toDomain(packageEntity.getPackaging()),
-            packageEntity.getProducts().stream().map(ProductMapper::toDomain).collect(Collectors.toList()),
-            packageEntity.getSupportedWeight()
+            ProductMapper.toDomain(packageEntity.getProduct()),
+            packageEntity.getSupportedWeight(),
+            packageEntity.getXPosition(),
+            packageEntity.getYPosition(),
+            packageEntity.getZPosition(),
+            packageEntity.getOrientation()
         );
     }
 
-    public static PackageEntity toEntity(Package packageEntity) {
-        return new PackageEntity(
-            packageEntity.id(),
-            null,
-            null,
-            null,
-            packageEntity.supportedWeight()
-        );
+    public static PackageEntity toEntity(Package pkg) {
+        if (pkg == null)
+            return null;
+
+        var load = new LoadEntity();
+        load.setId(pkg.loadId());
+
+        var pkgEntity = new PackageEntity();
+        pkgEntity.setId(pkg.id());
+        pkgEntity.setPackaging(PackagingMapper.toEntity(pkg.packaging()));
+        pkgEntity.setLoad(load);
+        pkgEntity.setProduct(ProductMapper.toEntity(pkg.product()));
+        pkgEntity.setSupportedWeight(pkg.supportedWeight());
+        pkgEntity.setXPosition(pkg.xPosition());
+        pkgEntity.setYPosition(pkg.yPosition());
+        pkgEntity.setZPosition(pkg.zPosition());
+        pkgEntity.setOrientation(pkg.orientation());
+
+        return pkgEntity;
     }
 }
