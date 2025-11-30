@@ -29,7 +29,7 @@ public class TruckEntity {
     private String plate;
 
     @Column(nullable = false)
-    private Integer maximumCapacity;
+    private Double maximumCapacity;
 
     @Embedded
     @AttributeOverrides({

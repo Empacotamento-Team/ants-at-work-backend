@@ -8,7 +8,7 @@ import java.util.List;
 public class Truck{
     private final Long id;
     private String plate;
-    private Integer maximumCapacity;
+    private Double maximumCapacity;
     private Dimensions internalDimensions;
     private TruckType type;
     private TruckStatus status;
@@ -18,7 +18,7 @@ public class Truck{
     private List<MaintenanceRecord> maintenanceHistory;
     private Fleet fleet;
 
-    public Truck(Long id, String plate, Integer maximumCapacity, Dimensions internalDimensions, TruckType type, TruckStatus status, LocalDate lastRevision, Double currentMileage, String details, Fleet fleet) {
+    public Truck(Long id, String plate, Double maximumCapacity, Dimensions internalDimensions, TruckType type, TruckStatus status, LocalDate lastRevision, Double currentMileage, String details, Fleet fleet) {
         this.id = id;
         this.plate = plate;
         this.maximumCapacity = maximumCapacity;
@@ -36,7 +36,7 @@ public class Truck{
 
     public String plate() {return this.plate;}
 
-    public Integer maximumCapacity(){ return this.maximumCapacity;}
+    public Double maximumCapacity(){ return this.maximumCapacity;}
 
     public Dimensions internalDimensions() {
         return this.internalDimensions;
@@ -73,7 +73,7 @@ public class Truck{
     }
     public void update(
             String plate,
-            Integer maximumCapacity,
+            Double maximumCapacity,
             Dimensions internalDimensions,
             TruckType type,
             TruckStatus status,

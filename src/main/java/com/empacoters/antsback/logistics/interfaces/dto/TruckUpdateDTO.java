@@ -5,7 +5,7 @@ import com.empacoters.antsback.logistics.domain.model.TruckType;
 
 public record TruckUpdateDTO(
         String plate,
-        Integer maximumCapacity,
+        Double maximumCapacity,
         Double internalHeight,
         Double internalWidth,
         Double internalLength,

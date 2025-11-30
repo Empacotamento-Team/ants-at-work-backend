@@ -20,7 +20,7 @@ public class CreateTruckUseCase {
 
     }
 
-    public Truck execute(String plate, Integer maximumCapacity, Dimensions internalDimensions, TruckType type, TruckStatus status, Double currentMileage, String details, String maintenanceNote)
+    public Truck execute(String plate, Double maximumCapacity, Dimensions internalDimensions, TruckType type, TruckStatus status, Double currentMileage, String details, String maintenanceNote)
     {
         var existingTruck = truckRepository.byPlate(plate);
         if (existingTruck != null) {

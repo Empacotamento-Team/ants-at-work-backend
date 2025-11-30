@@ -20,7 +20,7 @@ public class UpdateTruckUseCase {
     }
 
     public Truck execute(
-        Long truckId, String plate, Integer maximumCapacity,
+        Long truckId, String plate, Double maximumCapacity,
         Dimensions internalDimensions, TruckType type,
         TruckStatus status, Double currentMileage,
         String details, String maintenanceNote

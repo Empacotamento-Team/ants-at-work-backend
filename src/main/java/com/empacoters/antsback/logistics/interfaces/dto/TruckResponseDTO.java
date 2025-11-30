@@ -10,7 +10,7 @@ import java.util.List;
 public record TruckResponseDTO(
         Long id,
         String plate,
-        Integer maximumCapacity,
+        Double maximumCapacity,
         Double internalHeight,
         Double internalWidth,
         Double internalLength,
