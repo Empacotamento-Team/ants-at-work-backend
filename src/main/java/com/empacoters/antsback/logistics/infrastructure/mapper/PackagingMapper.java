@@ -8,12 +8,13 @@ public class PackagingMapper {
         if (packaging == null)
             return null;
 
-        return new PackagingEntity(
-            packaging.id(),
-            packaging.name(),
-            packaging.description(),
-            packaging.internalDimensions()
-        );
+        var packagingEntity = new PackagingEntity();
+        packagingEntity.setId(packaging.id());
+        packagingEntity.setName(packaging.name());
+        packagingEntity.setDescription(packaging.description());
+        packagingEntity.setInternalDimensions(packaging.internalDimensions());
+
+        return packagingEntity;
     }
 
     public static Packaging toDomain(PackagingEntity entity) {
