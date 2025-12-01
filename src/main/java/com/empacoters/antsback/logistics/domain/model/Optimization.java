@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.Instant;
 
 public class Optimization {
@@ -25,14 +27,17 @@ public class Optimization {
         this.createdAt = createdAt;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("optimizationQueueItemId")
     public Long optimizationQueueItemId() {
         return optimizationQueueItemId;
     }
 
+    @JsonProperty("solverStatus")
     public String solverStatus() {
         return solverStatus;
     }
@@ -41,6 +46,7 @@ public class Optimization {
         this.solverStatus = solverStatus;
     }
 
+    @JsonProperty("terminationCondition")
     public String terminationCondition() {
         return terminationCondition;
     }
@@ -49,6 +55,7 @@ public class Optimization {
         this.terminationCondition = terminationCondition;
     }
 
+    @JsonProperty("foundSolution")
     public boolean foundSolution() {
         return foundSolution;
     }
@@ -57,6 +64,7 @@ public class Optimization {
         this.foundSolution = foundSolution;
     }
 
+    @JsonProperty("containersUsed")
     public Integer containersUsed() {
         return containersUsed;
     }
@@ -65,6 +73,7 @@ public class Optimization {
         this.containersUsed = containersUsed;
     }
 
+    @JsonProperty("familyPenality")
     public Double familyPenality() {
         return familyPenality;
     }
@@ -73,6 +82,7 @@ public class Optimization {
         this.familyPenality = familyPenality;
     }
 
+    @JsonProperty("gravityCenterDeviation")
     public Double gravityCenterDeviation() {
         return gravityCenterDeviation;
     }
@@ -81,6 +91,7 @@ public class Optimization {
         this.gravityCenterDeviation = gravityCenterDeviation;
     }
 
+    @JsonProperty("createdAt")
     public Instant createdAt() {
         return createdAt;
     }

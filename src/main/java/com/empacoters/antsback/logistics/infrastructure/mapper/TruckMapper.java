@@ -3,9 +3,11 @@ package com.empacoters.antsback.logistics.infrastructure.mapper;
 import com.empacoters.antsback.logistics.domain.model.Fleet;
 import com.empacoters.antsback.logistics.domain.model.MaintenanceRecord;
 import com.empacoters.antsback.logistics.domain.model.Truck;
+import com.empacoters.antsback.logistics.domain.model.TruckModel;
 import com.empacoters.antsback.logistics.infrastructure.entity.FleetEntity;
 import com.empacoters.antsback.logistics.infrastructure.entity.MaintenanceRecordEntity;
 import com.empacoters.antsback.logistics.infrastructure.entity.TruckEntity;
+import com.empacoters.antsback.logistics.infrastructure.entity.TruckModelEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ public class TruckMapper {
         truckEntity.setLastRevision(truck.lastRevision());
         truckEntity.setCurrentMileage(truck.currentMileage());
         truckEntity.setDetails(truck.details());
-
+        truckEntity.setModel(null);
         List<MaintenanceRecordEntity> maintenanceEntities = truck.maintenanceHistory().stream()
                 .map(record -> MaintenanceRecordMapper.toEntity(record, truckEntity))
                 .collect(Collectors.toList());
@@ -55,6 +57,19 @@ public class TruckMapper {
             );
         }
 
+        TruckModel model = null;
+        var modelEntity = truckEntity.getModel();
+        if (modelEntity != null && modelEntity.getId() != null) {
+            model = new TruckModel(
+                    modelEntity.getId(),
+                    modelEntity.getName(),
+                    modelEntity.getDescription(),
+                    modelEntity.getDefaultMaximumCapacity(),
+                    modelEntity.getDefaultInternalDimensions(),
+                    modelEntity.getDefaultTruckType()
+            );
+        }
+
         List<MaintenanceRecord> maintenanceRecords = truckEntity.getMaintenanceHistory().stream()
                 .map(MaintenanceRecordMapper::toDomain)
                 .collect(Collectors.toList());
@@ -69,7 +84,8 @@ public class TruckMapper {
                 truckEntity.getLastRevision(),
                 truckEntity.getCurrentMileage(),
                 truckEntity.getDetails(),
-                fleet
+                fleet,
+                model
         );
 
         maintenanceRecords.forEach(truck::addMaintenceRecord);

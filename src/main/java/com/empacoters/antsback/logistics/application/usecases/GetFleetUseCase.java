@@ -32,6 +32,7 @@ public class GetFleetUseCase {
             fleet.id(),
             fleet.name(),
             fleet.codigo(),
+            fleet.placeOfOperation(),
             trucksQuantity,
             activeTrucks,
             underMaintenanceTrucks,

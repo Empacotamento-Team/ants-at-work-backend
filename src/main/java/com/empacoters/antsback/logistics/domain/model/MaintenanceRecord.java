@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 
 public class MaintenanceRecord {
@@ -13,12 +15,15 @@ public class MaintenanceRecord {
         this.description = description;
     }
 
+    @JsonProperty("id")
     public  Long id() { return id; }
 
+    @JsonProperty("date")
     public LocalDate date() {
         return date;
     }
 
+    @JsonProperty("description")
     public String description() {
         return description;
     }

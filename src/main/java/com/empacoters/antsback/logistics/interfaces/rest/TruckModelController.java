@@ -3,6 +3,9 @@ package com.empacoters.antsback.logistics.interfaces.rest;
 import com.empacoters.antsback.logistics.application.usecases.*;
 import com.empacoters.antsback.logistics.domain.model.TruckModel;
 import com.empacoters.antsback.logistics.interfaces.dto.CreateTruckModelRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +36,15 @@ public class TruckModelController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TruckModel>> list() {
-        var result = listTruckModelsUseCase.execute();
+    public ResponseEntity<Page<TruckModel>> list(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        var truckType = com.empacoters.antsback.logistics.domain.model.TruckType.fromDescription(type).orElse(null);
+        var result = listTruckModelsUseCase.execute(name, truckType, pageable);
         return ResponseEntity.ok(result);
     }
 

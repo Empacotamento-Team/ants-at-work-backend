@@ -13,5 +13,6 @@ public record TruckUpdateDTO(
         TruckStatus status,
         Double currentMileage,
         String details,
-        String maintenanceNote
+        String maintenanceNote,
+        Long modelId
 ) { }

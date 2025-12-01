@@ -3,6 +3,9 @@ package com.empacoters.antsback.logistics.interfaces.rest;
 import com.empacoters.antsback.logistics.application.usecases.*;
 import com.empacoters.antsback.logistics.interfaces.dto.*;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +43,14 @@ public class FleetController {
     }
 
     @GetMapping
-    public ResponseEntity<FleetResponseDTO[]> getAllFleets() {
-        var dtos = listFleetsUseCase.execute();
+    public ResponseEntity<Page<FleetResponseDTO>> getAllFleets(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String truckPlate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size
+    ) {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        var dtos = listFleetsUseCase.execute(name, truckPlate, pageable);
         return ResponseEntity.ok(dtos);
     }
 

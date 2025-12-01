@@ -8,6 +8,9 @@ import com.empacoters.antsback.logistics.domain.model.TruckType;
 import com.empacoters.antsback.logistics.interfaces.dto.TruckCreateDTO;
 import com.empacoters.antsback.logistics.interfaces.dto.TruckResponseDTO;
 import com.empacoters.antsback.logistics.interfaces.dto.TruckUpdateDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -40,18 +43,30 @@ public class TruckController {
         this.deleteTruckUseCase = deleteTruckUseCase;
     }
 
-    // GET /trucks?fleetId=...&status=...
+    // GET /trucks?fleetId=...&status=...&plate=...&type=...&modelId=...&page=...&size=...
     @GetMapping
-    public ResponseEntity<List<TruckResponseDTO>> getAllTrucks(
+    public ResponseEntity<Page<TruckResponseDTO>> getAllTrucks(
             @RequestParam(required = false) Long fleetId,
-            @RequestParam(required = false) String status
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String plate,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Long modelId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
     ) {
-        var truckStatus = TruckStatus.fromDescription(status).orElse(null);
-        List<Truck> trucks = listTrucksUseCase.execute(fleetId, truckStatus);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Truck> trucksPage;
+        
+        if (fleetId != null) {
+            var truckStatus = TruckStatus.fromDescription(status).orElse(null);
+            trucksPage = listTrucksUseCase.execute(fleetId, truckStatus, pageable);
+        } else {
+            var truckStatus = TruckStatus.fromDescription(status).orElse(null);
+            var truckType = TruckType.fromDescription(type).orElse(null);
+            trucksPage = listTrucksUseCase.execute(plate, truckType, truckStatus, modelId, pageable);
+        }
 
-        List<TruckResponseDTO> response = trucks.stream()
-                .map(TruckResponseDTO::fromTruck)
-                .collect(Collectors.toList());
+        Page<TruckResponseDTO> response = trucksPage.map(TruckResponseDTO::fromTruck);
 
         return ResponseEntity.ok(response);
     }
@@ -76,6 +91,10 @@ public class TruckController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<TruckResponseDTO> createTruck(@RequestBody TruckCreateDTO dto) {
+        System.out.println("=== DEBUG CONTROLLER ===");
+        System.out.println("DTO modelId: " + dto.modelId());
+        System.out.println("DTO completo: plate=" + dto.plate() + ", modelId=" + dto.modelId());
+        
         Truck created = createTruckUseCase.execute(
            dto.plate(),
            dto.maximumCapacity(),
@@ -84,7 +103,12 @@ public class TruckController {
            dto.status(),
            dto.currentMileage(),
            dto.details(),
-           dto.maintenanceNote());
+           dto.maintenanceNote(),
+           dto.modelId()
+        );
+        
+        System.out.println("Truck criado no controller - model: " + (created.model() != null ? created.model().id() : "null"));
+        System.out.println("=== FIM DEBUG CONTROLLER ===");
 
         return ResponseEntity
                 .created(URI.create("/trucks/" + created.id()))
@@ -108,7 +132,8 @@ public class TruckController {
                 dto.status(),
                 dto.currentMileage(),
                 dto.details(),
-                dto.maintenanceNote()
+                dto.maintenanceNote(),
+                dto.modelId()
         );
 
         return ResponseEntity.ok(TruckResponseDTO.fromTruck(updated));

@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Packaging {
     private final Long id;
     private String name;
@@ -13,10 +15,12 @@ public class Packaging {
         this.internalDimensions = internalDimensions;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("name")
     public String name() {
         return name;
     }
@@ -26,6 +30,7 @@ public class Packaging {
         this.name = name;
     }
 
+    @JsonProperty("description")
     public String description() {
         return description;
     }
@@ -33,6 +38,7 @@ public class Packaging {
         this.description = description;
     }
 
+    @JsonProperty("internalDimensions")
     public Dimensions internalDimensions() {
         return internalDimensions;
     }

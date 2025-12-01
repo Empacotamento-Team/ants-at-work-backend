@@ -1,5 +1,6 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.ValidationException;
 
@@ -22,46 +23,64 @@ public class Dimensions {
     }
 
     // Height
+    @JsonProperty("height")
     public Double height() {
         return height;
     }
+    
+    public void setHeight(Double height) {
+        this.height = height;
+    }
+    
     public void changeHeight(Double height)
     {
         this.height = validateHeight(height);
     }
 
     // Width
+    @JsonProperty("width")
     public Double width() {
         return width;
     }
+    
+    public void setWidth(Double width) {
+        this.width = width;
+    }
+    
     public void changeWidth(Double width)
     {
         this.width = validateWidth(width);
     }
 
     // Length
+    @JsonProperty("length")
     public Double length() {
         return length;
     }
+    
+    public void setLength(Double length) {
+        this.length = length;
+    }
+    
     public void changeLength(Double length)
     {
         this.length = validateLength(length);
     }
 
     private Double validateHeight(Double value) {
-        if (height == null || height < 0)
+        if (value == null || value < 0)
             throw new ValidationException("A altura não pode ser nula ou menor que zero.");
         return value;
     }
 
     private Double validateWidth(Double value) {
-        if (width == null || width < 0)
+        if (value == null || value < 0)
             throw new ValidationException("A largura não pode ser nula ou menor que zero.");
         return value;
     }
 
     private Double validateLength(Double value) {
-        if (length == null || length < 0)
+        if (value == null || value < 0)
             throw new ValidationException("O comprimento não pode ser nulo ou menor que zero.");
         return value;
     }

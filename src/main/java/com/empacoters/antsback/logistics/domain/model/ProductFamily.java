@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ProductFamily {
     private final Long id;
     private String name;
@@ -13,10 +15,12 @@ public class ProductFamily {
         this.defaultMaxSupportedWeight = defaultMaxSupportedWeight;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("name")
     public String name() {
         return name;
     }
@@ -27,6 +31,7 @@ public class ProductFamily {
         this.name = name;
     }
 
+    @JsonProperty("description")
     public String description() {
         return description;
     }
@@ -35,6 +40,7 @@ public class ProductFamily {
         this.description = description;
     }
 
+    @JsonProperty("defaultMaxSupportedWeight")
     public Double defaultMaxSupportedWeight() {
         return defaultMaxSupportedWeight;
     }

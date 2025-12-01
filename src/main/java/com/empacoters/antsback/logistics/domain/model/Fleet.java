@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,10 +21,12 @@ public class Fleet {
         this.trucks = new ArrayList<>(trucks.stream().filter(Objects::nonNull).toList());
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("name")
     public String name() {
         return name;
     }
@@ -30,6 +34,7 @@ public class Fleet {
         this.name = nome;
     }
 
+    @JsonProperty("code")
     public String codigo() {
         return code;
     }
@@ -37,6 +42,7 @@ public class Fleet {
         this.code = code;
     }
 
+    @JsonProperty("placeOfOperation")
     public String placeOfOperation() {
         return placeOfOperation;
     }

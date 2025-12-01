@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Product {
     private final Long id;
     private String name;
@@ -21,10 +23,12 @@ public class Product {
         this.fragile = fragile;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("name")
     public String name() {
         return name;
     }
@@ -35,6 +39,7 @@ public class Product {
         this.name = name;
     }
 
+    @JsonProperty("family")
     public ProductFamily family() {
         return family;
     }
@@ -45,6 +50,7 @@ public class Product {
         this.family = family;
     }
 
+    @JsonProperty("dimensions")
     public Dimensions dimensions() {
         return dimensions;
     }
@@ -55,6 +61,7 @@ public class Product {
         this.dimensions = dimensions;
     }
 
+    @JsonProperty("weight")
     public Double weight() {
         return weight;
     }
@@ -65,6 +72,7 @@ public class Product {
         this.weight = weight;
     }
 
+    @JsonProperty("maxSupportedWeight")
     public Double maxSupportedWeight() {
         return maxSupportedWeight;
     }
@@ -74,7 +82,7 @@ public class Product {
             throw new IllegalArgumentException("A capacidade máxima de peso do produto não pode ser menor que zero.");
         this.maxSupportedWeight = maxSupportedWeight;
     }
-
+    @JsonProperty("batch")
     public String batch() {
         return batch;
     }
@@ -83,6 +91,7 @@ public class Product {
         this.batch = batch;
     }
 
+    @JsonProperty("fragile")
     public boolean fragile() {
         return fragile;
     }

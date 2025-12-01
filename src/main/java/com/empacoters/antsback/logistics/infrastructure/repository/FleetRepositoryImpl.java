@@ -4,6 +4,9 @@ import com.empacoters.antsback.logistics.domain.model.Fleet;
 import com.empacoters.antsback.logistics.domain.repository.FleetRepository;
 import com.empacoters.antsback.logistics.infrastructure.entity.TruckEntity;
 import com.empacoters.antsback.logistics.infrastructure.mapper.FleetMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,6 +26,26 @@ public class FleetRepositoryImpl implements FleetRepository {
         var entities = this.springDataFleetRepository.findAll();
 
         return entities.stream().map(FleetMapper::toDomain).toList();
+    }
+
+    @Override
+    public Page<Fleet> listAll(Pageable pageable) {
+        var entitiesPage = this.springDataFleetRepository.findAll(pageable);
+        var fleets = entitiesPage.getContent().stream()
+                .map(FleetMapper::toDomain)
+                .toList();
+        return new PageImpl<>(fleets, pageable, entitiesPage.getTotalElements());
+    }
+
+    @Override
+    public Page<Fleet> listAllWithFilters(String name, String truckPlate, Pageable pageable) {
+        String nameFilter = (name != null && !name.trim().isEmpty()) ? name.trim() : null;
+        String truckPlateFilter = (truckPlate != null && !truckPlate.trim().isEmpty()) ? truckPlate.trim() : null;
+        var entitiesPage = this.springDataFleetRepository.findAllWithFilters(nameFilter, truckPlateFilter, pageable);
+        var fleets = entitiesPage.getContent().stream()
+                .map(FleetMapper::toDomain)
+                .toList();
+        return new PageImpl<>(fleets, pageable, entitiesPage.getTotalElements());
     }
 
     @Override

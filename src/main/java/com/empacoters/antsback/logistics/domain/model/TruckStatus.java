@@ -6,7 +6,8 @@ import java.util.Optional;
 
 public enum TruckStatus {
     UNDER_MAINTENANCE("Em Manutenção"),
-    AVAILABLE("Ativo");
+    AVAILABLE("Ativo"),
+    UNAVAILABLE("Inativo");
 
     private final String description;
 

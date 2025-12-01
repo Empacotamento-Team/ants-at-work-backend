@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class Load {
@@ -29,10 +31,12 @@ public class Load {
         this.zPosition = zPosition;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("shipmentId")
     public Long shipmentId() {
         return shipmentId;
     }
@@ -41,6 +45,7 @@ public class Load {
         this.shipmentId = shipmentId;
     }
 
+    @JsonProperty("relatedTruck")
     public Truck relatedTruck() {
         return relatedTruck;
     }
@@ -49,6 +54,7 @@ public class Load {
         this.relatedTruck = validateTruck(relatedTruck);
     }
 
+    @JsonProperty("packages")
     public List<Package> packages() {
         return packages;
     }
@@ -57,6 +63,7 @@ public class Load {
         this.packages = validatePackages(packages);
     }
 
+    @JsonProperty("totalAllocatedWeight")
     public Double totalAllocatedWeight() {
         return totalAllocatedWeight;
     }
@@ -65,6 +72,7 @@ public class Load {
         this.totalAllocatedWeight = totalAllocatedWeight;
     }
 
+    @JsonProperty("remainingWeight")
     public Double remainingWeight() {
         return remainingWeight;
     }
@@ -73,6 +81,7 @@ public class Load {
         this.remainingWeight = remainingWeight;
     }
 
+    @JsonProperty("totalAllocatedVolume")
     public Double totalAllocatedVolume() {
         return totalAllocatedVolume;
     }
@@ -81,6 +90,7 @@ public class Load {
         this.totalAllocatedVolume = totalAllocatedVolume;
     }
 
+    @JsonProperty("volumeOccupationPercentage")
     public Double volumeOccupationPercentage() {
         return volumeOccupationPercentage;
     }
@@ -89,6 +99,7 @@ public class Load {
         this.volumeOccupationPercentage = volumeOccupationPercentage;
     }
 
+    @JsonProperty("xPosition")
     public Double xPosition() {
         return xPosition;
     }
@@ -97,6 +108,7 @@ public class Load {
         this.xPosition = xPosition;
     }
 
+    @JsonProperty("yPosition")
     public Double yPosition() {
         return yPosition;
     }
@@ -105,6 +117,7 @@ public class Load {
         this.yPosition = yPosition;
     }
 
+    @JsonProperty("zPosition")
     public Double zPosition() {
         return zPosition;
     }

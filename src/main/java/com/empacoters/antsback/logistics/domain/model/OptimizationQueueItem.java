@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.Instant;
 
 public class OptimizationQueueItem {
@@ -20,10 +22,12 @@ public class OptimizationQueueItem {
         this.updatedAt = updatedAt;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("status")
     public OptimizationStatus status() {
         return status;
     }
@@ -32,6 +36,7 @@ public class OptimizationQueueItem {
         this.status = status;
     }
 
+    @JsonProperty("attempts")
     public Integer attempts() {
         return attempts;
     }
@@ -40,6 +45,7 @@ public class OptimizationQueueItem {
         this.attempts = attempts;
     }
 
+    @JsonProperty("requestData")
     public String requestData() {
         return requestData;
     }
@@ -48,10 +54,12 @@ public class OptimizationQueueItem {
         this.requestData = requestData;
     }
 
+    @JsonProperty("createdAt")
     public Instant createdAt() {
         return createdAt;
     }
 
+    @JsonProperty("updatedAt")
     public Instant updatedAt() {
         return updatedAt;
     }

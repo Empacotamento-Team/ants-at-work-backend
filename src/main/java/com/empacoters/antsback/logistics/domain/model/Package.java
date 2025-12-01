@@ -1,6 +1,8 @@
 package com.empacoters.antsback.logistics.domain.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Package {
     private final Long id;
     private Long loadId;
@@ -24,18 +26,22 @@ public class Package {
         this.orientation = orientation;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("loadId")
     public Long loadId() {
         return loadId;
     }
 
+    @JsonProperty("changeLoadId")
     public void changeLoadId(Long loadId) {
         this.loadId = loadId;
     }
 
+    @JsonProperty("packaging")
     public Packaging packaging() {
         return packaging;
     }
@@ -46,6 +52,7 @@ public class Package {
         this.packaging = packaging;
     }
 
+    @JsonProperty("product")
     public Product product() {
         return product;
     }
@@ -56,6 +63,7 @@ public class Package {
         this.product = product;
     }
 
+    @JsonProperty("supportedWeight")
     public Double supportedWeight() {
         return supportedWeight;
     }
@@ -66,14 +74,14 @@ public class Package {
         this.supportedWeight = supportedWeight;
     }
 
-    public Double xPosition() {
-        return xPosition;
-    }
+    @JsonProperty("xPosition")
+    public Double xPosition() { return xPosition; }
 
     public void changeXPosition(Double xPosition) {
         this.xPosition = xPosition;
     }
 
+    @JsonProperty("yPosition")
     public Double yPosition() {
         return yPosition;
     }
@@ -82,6 +90,7 @@ public class Package {
         this.yPosition = yPosition;
     }
 
+    @JsonProperty("zPosition")
     public Double zPosition() {
         return zPosition;
     }
@@ -90,6 +99,7 @@ public class Package {
         this.zPosition = zPosition;
     }
 
+    @JsonProperty("orientation")
     public String orientation() {
         return orientation;
     }

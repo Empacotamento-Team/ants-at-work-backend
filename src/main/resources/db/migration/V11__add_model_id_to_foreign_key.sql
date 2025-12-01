@@ -1,0 +1,5 @@
+ALTER TABLE trucks
+ADD CONSTRAINT fk_trucks_model
+FOREIGN KEY (model_id) REFERENCES truck_models(id)
+ON DELETE SET NULL
+ON UPDATE CASCADE;

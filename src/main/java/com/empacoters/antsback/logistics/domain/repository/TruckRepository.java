@@ -2,6 +2,9 @@ package com.empacoters.antsback.logistics.domain.repository;
 
 import com.empacoters.antsback.logistics.domain.model.Truck;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
+import com.empacoters.antsback.logistics.domain.model.TruckType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,6 +14,10 @@ public interface TruckRepository  {
     List<Truck> byIdIn(List<Long> ids);
 
     List<Truck> byFleetIdAndStatus(Long fleetId, TruckStatus status);
+
+    Page<Truck> byFleetIdAndStatus(Long fleetId, TruckStatus status, Pageable pageable);
+    
+    Page<Truck> findAllWithFilters(String plate, TruckType type, TruckStatus status, Long modelId, Pageable pageable);
 
     List<Truck> fiveByFleetId(Long fleetId);
 

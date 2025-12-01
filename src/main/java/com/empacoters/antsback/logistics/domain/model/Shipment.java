@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +17,12 @@ public class Shipment {
         this.createdAt = createdAt;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("loads")
     public List<Load> loads() {
         return loads;
     }
@@ -33,6 +37,7 @@ public class Shipment {
         loads.add(load);
     }
 
+    @JsonProperty("createdAt")
     public Instant createdAt() {
         return createdAt;
     }

@@ -1,6 +1,7 @@
 package com.empacoters.antsback.logistics.infrastructure.entity;
 
 import com.empacoters.antsback.logistics.domain.model.Dimensions;
+import com.empacoters.antsback.logistics.domain.model.TruckModel;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
 import com.empacoters.antsback.logistics.domain.model.TruckType;
 import jakarta.persistence.*;
@@ -55,6 +56,10 @@ public class TruckEntity {
 
     @Column(name = "details")
     private String details;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "model_id", nullable = true)
+    private TruckModelEntity model;
 
     @OneToMany(mappedBy = "truck", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MaintenanceRecordEntity> maintenanceHistory = new ArrayList<>();

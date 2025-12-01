@@ -1,5 +1,7 @@
 package com.empacoters.antsback.logistics.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TruckModel {
     private final Long id;
     private String name;
@@ -18,10 +20,12 @@ public class TruckModel {
         this.defaultTruckType = defaultTruckType;
     }
 
+    @JsonProperty("id")
     public Long id() {
         return id;
     }
 
+    @JsonProperty("name")
     public String name() {
         return name;
     }
@@ -29,6 +33,7 @@ public class TruckModel {
         this.name = name;
     }
 
+    @JsonProperty("description")
     public String description() {
         return description;
     }
@@ -36,6 +41,7 @@ public class TruckModel {
         this.description = description;
     }
 
+    @JsonProperty("defaultMaximumCapacity")
     public Double defaultMaximumCapacity() {
         return defaultMaximumCapacity;
     }
@@ -43,6 +49,7 @@ public class TruckModel {
         this.defaultMaximumCapacity = defaultMaximumCapacity;
     }
 
+    @JsonProperty("defaultInternalDimensions")
     public Dimensions defaultInternalDimensions() {
         return defaultInternalDimensions;
     }
@@ -50,6 +57,7 @@ public class TruckModel {
         this.defaultInternalDimensions = defaultInternalDimensions;
     }
 
+    @JsonProperty("defaultTruckType")
     public TruckType defaultTruckType() {
         return defaultTruckType;
     }
