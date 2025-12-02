@@ -6,6 +6,7 @@ import com.empacoters.antsback.logistics.domain.repository.*;
 import com.empacoters.antsback.logistics.interfaces.dto.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -25,6 +26,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 @Service
 public class OptimizationService {
@@ -37,20 +39,22 @@ public class OptimizationService {
     private final TruckRepository truckRepository;
     private final PackageRepository packageRepository;
     private final WebClient.Builder webClientBuilder;
+    private final ExecutorService executorService;
 
     @Value("${optimizer.url}")
     private String optimizerUrl;
 
-    public OptimizationService(OptimizationQueueItemRepository optimizationQueueItemRepository, WebClient.Builder webClientBuilder, OptimizationRepository optimizationRepository, ShipmentRepository shipmentRepository, TruckRepository truckRepository, PackageRepository packageRepository) {
+    public OptimizationService(OptimizationQueueItemRepository optimizationQueueItemRepository, WebClient.Builder webClientBuilder, OptimizationRepository optimizationRepository, ShipmentRepository shipmentRepository, TruckRepository truckRepository, PackageRepository packageRepository, ExecutorService executorService) {
         this.optimizationQueueItemRepository = optimizationQueueItemRepository;
         this.webClientBuilder = webClientBuilder;
         this.optimizationRepository = optimizationRepository;
         this.shipmentRepository = shipmentRepository;
         this.truckRepository = truckRepository;
         this.packageRepository = packageRepository;
+        this.executorService = executorService;
     }
 
-    public void register(OptimizerRequestDTO dto) {
+    public OptimizationQueueItem register(OptimizerRequestDTO dto) {
         ObjectMapper mapper = new ObjectMapper();
         String data;
 
@@ -60,10 +64,13 @@ public class OptimizationService {
             throw new RuntimeException(e);
         }
 
-        this.optimizationQueueItemRepository.save(new OptimizationQueueItem(
+        var queueItem = this.optimizationQueueItemRepository.save(new OptimizationQueueItem(
             null, OptimizationStatus.PENDING, 0,
             data, Instant.now(), Instant.now()
         ));
+
+        executorService.submit(() -> process(queueItem));
+        return queueItem;
     }
 
     public void process(OptimizationQueueItem item) {
@@ -104,6 +111,13 @@ public class OptimizationService {
         item.changeUpdatedAt(Instant.now());
         optimizationQueueItemRepository.save(item);
         processing = false;
+    }
+
+    @PostConstruct
+    private void recoverQueued() {
+        var pendentes = optimizationQueueItemRepository.findAllByStatus(OptimizationStatus.PENDING);
+
+        pendentes.forEach(this::process);
     }
 
     private void saveOptimizerResponse(OptimizerResponseDTO response, Long queueItemId) {
