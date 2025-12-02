@@ -3,6 +3,7 @@ package com.empacoters.antsback.logistics.infrastructure.repository;
 import com.empacoters.antsback.logistics.domain.model.Optimization;
 import com.empacoters.antsback.logistics.domain.repository.OptimizationRepository;
 import com.empacoters.antsback.logistics.infrastructure.mapper.OptimizationMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class OptimizationRepositoryImpl implements OptimizationRepository {
 
     @Override
     public List<Optimization> findAll() {
-        var all = springDataOptimizationRepository.findAll();
+        var all = springDataOptimizationRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         return all.stream().map(OptimizationMapper::toDomain).toList();
     }
 

@@ -18,7 +18,15 @@ public class OptimizationQueueItemRepositoryImpl implements OptimizationQueueIte
 
     @Override
     public List<OptimizationQueueItem> findAll() {
-        return springDataRepository.findAll()
+        return springDataRepository.findAllOrderByCreatedAtAsc()
+            .stream()
+            .map(OptimizationQueueItemMapper::toDomain)
+            .toList();
+    }
+
+    @Override
+    public List<OptimizationQueueItem> findAllByStatus(OptimizationStatus status) {
+        return springDataRepository.findAllByStatusOrderByCreatedAtAsc(status)
             .stream()
             .map(OptimizationQueueItemMapper::toDomain)
             .toList();
