@@ -10,6 +10,5 @@ import java.util.Optional;
 public interface SpringDataOptimizationQueueItemRepository extends JpaRepository<OptimizationQueueItemEntity, Long> {
     Optional<OptimizationQueueItemEntity> findFirstByStatusOrderByCreatedAtAsc(OptimizationStatus status);
 
-    List<OptimizationQueueItemEntity> findAllOrderByCreatedAtAsc();
     List<OptimizationQueueItemEntity> findAllByStatusOrderByCreatedAtAsc(OptimizationStatus status);
 }

@@ -4,6 +4,7 @@ import com.empacoters.antsback.logistics.domain.model.OptimizationQueueItem;
 import com.empacoters.antsback.logistics.domain.model.OptimizationStatus;
 import com.empacoters.antsback.logistics.domain.repository.OptimizationQueueItemRepository;
 import com.empacoters.antsback.logistics.infrastructure.mapper.OptimizationQueueItemMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class OptimizationQueueItemRepositoryImpl implements OptimizationQueueIte
 
     @Override
     public List<OptimizationQueueItem> findAll() {
-        return springDataRepository.findAllOrderByCreatedAtAsc()
+        return springDataRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
             .stream()
             .map(OptimizationQueueItemMapper::toDomain)
             .toList();
