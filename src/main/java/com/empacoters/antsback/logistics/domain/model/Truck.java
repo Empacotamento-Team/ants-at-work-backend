@@ -104,7 +104,7 @@ public class Truck{
         if (plate != null && !plate.isEmpty()) {
             this.plate = plate;
         }
-        if (maximumCapacity != null && maximumCapacity > 0) {
+        if (maximumCapacity != null) {
             this.maximumCapacity = maximumCapacity;
         }
         if (internalDimensions != null) {

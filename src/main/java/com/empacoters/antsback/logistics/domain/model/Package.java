@@ -69,8 +69,8 @@ public class Package {
     }
 
     public void changeSupportedWeight(Double supportedWeight) {
-        if (supportedWeight == null || supportedWeight < 0)
-            throw new IllegalArgumentException("O peso suportado não pode ser nulo ou menor que zero.");
+        if (supportedWeight == null || supportedWeight <= 0)
+            throw new IllegalArgumentException("O peso suportado deve ser maior que 0.");
         this.supportedWeight = supportedWeight;
     }
 

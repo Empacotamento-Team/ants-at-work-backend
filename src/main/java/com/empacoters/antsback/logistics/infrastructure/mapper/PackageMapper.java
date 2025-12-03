@@ -28,13 +28,19 @@ public class PackageMapper {
         if (pkg == null)
             return null;
 
-        var load = new LoadEntity();
-        load.setId(pkg.loadId());
-
         var pkgEntity = new PackageEntity();
         pkgEntity.setId(pkg.id());
         pkgEntity.setPackaging(PackagingMapper.toEntity(pkg.packaging()));
-        pkgEntity.setLoad(load);
+        
+        // Só associa Load se loadId não for null
+        if (pkg.loadId() != null) {
+            var load = new LoadEntity();
+            load.setId(pkg.loadId());
+            pkgEntity.setLoad(load);
+        } else {
+            pkgEntity.setLoad(null);
+        }
+        
         pkgEntity.setProduct(ProductMapper.toEntity(pkg.product()));
         pkgEntity.setSupportedWeight(pkg.supportedWeight());
         pkgEntity.setXPosition(pkg.xPosition());

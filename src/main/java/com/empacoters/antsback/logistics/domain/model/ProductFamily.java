@@ -12,6 +12,8 @@ public class ProductFamily {
         this.id = id;
         this.name = name;
         this.description = description;
+        if (defaultMaxSupportedWeight != null && defaultMaxSupportedWeight <= 0)
+            throw new IllegalArgumentException("A capacidade máxima padrão da família deve ser maior que 0.");
         this.defaultMaxSupportedWeight = defaultMaxSupportedWeight;
     }
 
@@ -46,8 +48,8 @@ public class ProductFamily {
     }
 
     public void changeDefaultMaxSupportedWeight(Double defaultMaxSupportedWeight) {
-        if (defaultMaxSupportedWeight == null || defaultMaxSupportedWeight < 0)
-            throw new IllegalArgumentException("A capacidade máxima padrão da família não pode ser negativa/nula.");
+        if (defaultMaxSupportedWeight == null || defaultMaxSupportedWeight <= 0)
+            throw new IllegalArgumentException("A capacidade máxima padrão da família deve ser maior que 0.");
         this.defaultMaxSupportedWeight = defaultMaxSupportedWeight;
     }
 }

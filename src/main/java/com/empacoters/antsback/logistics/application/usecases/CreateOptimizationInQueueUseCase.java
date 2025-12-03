@@ -11,10 +11,14 @@ import com.empacoters.antsback.logistics.interfaces.dto.OptimizerRequestContaine
 import com.empacoters.antsback.logistics.interfaces.dto.OptimizerRequestDTO;
 import com.empacoters.antsback.logistics.interfaces.dto.OptimizerRequestItemRowDTO;
 import com.empacoters.antsback.shared.exception.BadRequestException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CreateOptimizationInQueueUseCase {
@@ -48,19 +52,42 @@ public class CreateOptimizationInQueueUseCase {
         var containersDto = containers.stream().map(truck -> {
             var dimensions = truck.internalDimensions();
             return new OptimizerRequestContainerRowDTO(
-                truck.id(), dimensions.width(), dimensions.height(),
-                dimensions.length(), truck.maximumCapacity()
+                truck.id(), dimensions.length(), dimensions.width(),
+                dimensions.height(), truck.maximumCapacity()
             );
         }).toArray(OptimizerRequestContainerRowDTO[]::new);
-        var packagesDto = packages.stream().map(pkg -> new OptimizerRequestItemRowDTO(
-            pkg.id(), pkg.product().name(),
+        // Converter dimensões de pacotes de cm para m (produtos em cm, containers em m)
+        var packagesDto = packages.stream().map(pkg -> {
+            // Dimensões do pacote estão em cm, converter para m
+            double heightInM = pkg.packaging().internalDimensions().height() / 100.0;
+            double widthInM = pkg.packaging().internalDimensions().width() / 100.0;
+            double lengthInM = pkg.packaging().internalDimensions().length() / 100.0;
+            
+            return new OptimizerRequestItemRowDTO(
+                pkg.id(), pkg.product().name(),
                 pkg.product().family().id(), pkg.product().family().name(),
                 pkg.product().batch(), pkg.product().weight(),
-                pkg.product().maxSupportedWeight(), pkg.packaging().internalDimensions().height(),
-                pkg.packaging().internalDimensions().width(), pkg.packaging().internalDimensions().length()
-        )).toArray(OptimizerRequestItemRowDTO[]::new);
+                pkg.product().maxSupportedWeight(), heightInM,
+                widthInM, lengthInM
+            );
+        }).toArray(OptimizerRequestItemRowDTO[]::new);
 
         var requestDto = new OptimizerRequestDTO(packagesDto, containersDto);
-        return optimizationService.register(requestDto);
+        
+        Map<String, Object> requestDataMap = new HashMap<>();
+        requestDataMap.put("fleetId", optimizationRequestDTO.fleetId());
+        requestDataMap.put("packagesIds", optimizationRequestDTO.packagesIds());
+        requestDataMap.put("items", requestDto.items());
+        requestDataMap.put("containers", requestDto.containers());
+        
+        ObjectMapper mapper = new ObjectMapper();
+        String requestDataJson;
+        try {
+            requestDataJson = mapper.writeValueAsString(requestDataMap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Erro ao serializar dados da requisição", e);
+        }
+        
+        return optimizationService.register(requestDto, requestDataJson);
     }
 }

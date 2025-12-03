@@ -11,9 +11,9 @@ public class Dimensions {
     private Double length;
 
     public Dimensions(Double height, Double width, Double length) {
-        this.height = height;
-        this.width = width;
-        this.length = length;
+        this.height = validateHeight(height);
+        this.width = validateWidth(width);
+        this.length = validateLength(length);
     }
 
     public Dimensions() {
@@ -68,20 +68,20 @@ public class Dimensions {
     }
 
     private Double validateHeight(Double value) {
-        if (value == null || value < 0)
-            throw new ValidationException("A altura não pode ser nula ou menor que zero.");
+        if (value == null || value <= 0)
+            throw new ValidationException("A altura deve ser maior que 0.");
         return value;
     }
 
     private Double validateWidth(Double value) {
-        if (value == null || value < 0)
-            throw new ValidationException("A largura não pode ser nula ou menor que zero.");
+        if (value == null || value <= 0)
+            throw new ValidationException("A largura deve ser maior que 0.");
         return value;
     }
 
     private Double validateLength(Double value) {
-        if (value == null || value < 0)
-            throw new ValidationException("O comprimento não pode ser nulo ou menor que zero.");
+        if (value == null || value <= 0)
+            throw new ValidationException("O comprimento deve ser maior que 0.");
         return value;
     }
 }

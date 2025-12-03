@@ -53,7 +53,7 @@ public interface SpringDataTruckRepository extends JpaRepository<TruckEntity, Lo
     @EntityGraph(attributePaths = {"model"})
     List<TruckEntity> findByPlate(String plate);
 
-    @EntityGraph(attributePaths = {"model"})
+    @EntityGraph(attributePaths = {"model", "fleet", "maintenanceHistory"})
     @Override
     Optional<TruckEntity> findById(Long id);
     

@@ -17,7 +17,11 @@ public class Product {
         this.name = name;
         this.family = family;
         this.dimensions = dimensions;
+        if (weight != null && weight <= 0)
+            throw new IllegalArgumentException("O peso do produto deve ser maior que 0.");
         this.weight = weight;
+        if (maxSupportedWeight != null && maxSupportedWeight <= 0)
+            throw new IllegalArgumentException("A capacidade máxima de peso do produto deve ser maior que 0.");
         this.maxSupportedWeight = maxSupportedWeight;
         this.batch = batch;
         this.fragile = fragile;
@@ -67,8 +71,8 @@ public class Product {
     }
 
     public void changeWeight(Double weight) {
-        if (weight == null || weight < 0)
-            throw new IllegalArgumentException("O peso do produto não pode ser nulo ou menor que zero.");
+        if (weight == null || weight <= 0)
+            throw new IllegalArgumentException("O peso do produto deve ser maior que 0.");
         this.weight = weight;
     }
 
@@ -78,8 +82,8 @@ public class Product {
     }
 
     public void changeMaxSupportedWeight(Double maxSupportedWeight) {
-        if (maxSupportedWeight < 0)
-            throw new IllegalArgumentException("A capacidade máxima de peso do produto não pode ser menor que zero.");
+        if (maxSupportedWeight == null || maxSupportedWeight <= 0)
+            throw new IllegalArgumentException("A capacidade máxima de peso do produto deve ser maior que 0.");
         this.maxSupportedWeight = maxSupportedWeight;
     }
     @JsonProperty("batch")

@@ -16,6 +16,11 @@ public enum OptimizationStatus {
 
     @JsonValue
     public String status() {
+        // Retornar o nome do enum em vez da descrição para compatibilidade com o frontend
+        return this.name();
+    }
+    
+    public String description() {
         return this.status;
     }
 }

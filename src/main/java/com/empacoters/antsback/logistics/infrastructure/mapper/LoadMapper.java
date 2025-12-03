@@ -6,8 +6,11 @@ import com.empacoters.antsback.logistics.infrastructure.entity.ShipmentEntity;
 
 public class LoadMapper {
     public static LoadEntity toEntity(Load load) {
-        var shipmentEntity = new ShipmentEntity();
-        shipmentEntity.setId(load.shipmentId());
+        ShipmentEntity shipmentEntity = null;
+        if (load.shipmentId() != null) {
+            shipmentEntity = new ShipmentEntity();
+            shipmentEntity.setId(load.shipmentId());
+        }
 
         var loadEntity = new LoadEntity();
 
@@ -35,14 +38,20 @@ public class LoadMapper {
     public static Load toDomain(LoadEntity loadEntity) {
         var packages = loadEntity.getPackages().stream().map(PackageMapper::toDomain).toList();
 
+        Long shipmentId = null;
+        if (loadEntity.getShipment() != null) {
+            shipmentId = loadEntity.getShipment().getId();
+        }
+
         return new Load(
             loadEntity.getId(),
-            loadEntity.getShipment().getId(),
+            shipmentId,
             TruckMapper.toDomain(loadEntity.getRelatedTruck()),
             packages,
             loadEntity.getTotalAllocatedWeight(),
             loadEntity.getRemainingWeight(),
             loadEntity.getTotalAllocatedVolume(),
+            loadEntity.getVolumeOccupationPercentage(),
             loadEntity.getXPosition(),
             loadEntity.getYPosition(),
             loadEntity.getZPosition()

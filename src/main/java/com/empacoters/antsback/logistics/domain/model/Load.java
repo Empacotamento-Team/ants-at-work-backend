@@ -17,7 +17,7 @@ public class Load {
     private Double yPosition;
     private Double zPosition;
 
-    public Load(Long id, Long shipmentId, Truck relatedTruck, List<Package> packages, Double totalAllocatedWeight, Double remainingWeight, Double totalAllocatedVolume, Double xPosition, Double yPosition, Double zPosition) {
+    public Load(Long id, Long shipmentId, Truck relatedTruck, List<Package> packages, Double totalAllocatedWeight, Double remainingWeight, Double totalAllocatedVolume, Double volumeOccupationPercentage, Double xPosition, Double yPosition, Double zPosition) {
         this.id = id;
         this.shipmentId = shipmentId;
         this.relatedTruck = validateTruck(relatedTruck);
@@ -25,7 +25,17 @@ public class Load {
         this.totalAllocatedWeight = totalAllocatedWeight;
         this.remainingWeight = remainingWeight;
         this.totalAllocatedVolume = totalAllocatedVolume;
-        this.volumeOccupationPercentage = totalAllocatedVolume / totalAllocatedWeight;
+        // Usar o volumeOccupationPercentage passado como parâmetro (já calculado pelo otimizador)
+        // Se for null, calcular baseado no volume do container
+        if (volumeOccupationPercentage != null && volumeOccupationPercentage > 0) {
+            this.volumeOccupationPercentage = volumeOccupationPercentage;
+        } else {
+            // Calcular como porcentagem do volume total do container
+            var containerVolume = relatedTruck.internalDimensions().length() * 
+                                  relatedTruck.internalDimensions().width() * 
+                                  relatedTruck.internalDimensions().height();
+            this.volumeOccupationPercentage = containerVolume > 0 ? (totalAllocatedVolume / containerVolume) : 0.0;
+        }
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.zPosition = zPosition;
