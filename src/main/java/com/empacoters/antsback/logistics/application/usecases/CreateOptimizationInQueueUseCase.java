@@ -56,9 +56,7 @@ public class CreateOptimizationInQueueUseCase {
                 dimensions.height(), truck.maximumCapacity()
             );
         }).toArray(OptimizerRequestContainerRowDTO[]::new);
-        // Converter dimensões de pacotes de cm para m (produtos em cm, containers em m)
         var packagesDto = packages.stream().map(pkg -> {
-            // Dimensões do pacote estão em cm, converter para m
             double heightInM = pkg.packaging().internalDimensions().height() / 100.0;
             double widthInM = pkg.packaging().internalDimensions().width() / 100.0;
             double lengthInM = pkg.packaging().internalDimensions().length() / 100.0;
@@ -71,7 +69,7 @@ public class CreateOptimizationInQueueUseCase {
                 widthInM, lengthInM
             );
         }).toArray(OptimizerRequestItemRowDTO[]::new);
-
+        
         var requestDto = new OptimizerRequestDTO(packagesDto, containersDto);
         
         Map<String, Object> requestDataMap = new HashMap<>();

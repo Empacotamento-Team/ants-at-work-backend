@@ -20,4 +20,3 @@ public class DeletePackageUseCase {
         packageRepository.delete(id);
     }
 }
-
