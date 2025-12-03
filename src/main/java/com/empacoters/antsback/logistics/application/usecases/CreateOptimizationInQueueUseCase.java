@@ -1,5 +1,6 @@
 package com.empacoters.antsback.logistics.application.usecases;
 
+import com.empacoters.antsback.logistics.domain.model.Dimensions;
 import com.empacoters.antsback.logistics.domain.model.OptimizationQueueItem;
 import com.empacoters.antsback.logistics.domain.model.Package;
 import com.empacoters.antsback.logistics.domain.model.TruckStatus;
@@ -52,13 +53,20 @@ public class CreateOptimizationInQueueUseCase {
                 dimensions.length(), truck.maximumCapacity()
             );
         }).toArray(OptimizerRequestContainerRowDTO[]::new);
-        var packagesDto = packages.stream().map(pkg -> new OptimizerRequestItemRowDTO(
-            pkg.id(), pkg.product().name(),
-                pkg.product().family().id(), pkg.product().family().name(),
-                pkg.product().batch(), pkg.product().weight(),
-                pkg.product().maxSupportedWeight(), pkg.packaging().internalDimensions().height(),
-                pkg.packaging().internalDimensions().width(), pkg.packaging().internalDimensions().length()
-        )).toArray(OptimizerRequestItemRowDTO[]::new);
+        var packagesDto = packages.stream().map(pkg -> {
+            var dimensions = new Dimensions(  // converting to meters
+                pkg.packaging().internalDimensions().height() / 100,
+                pkg.packaging().internalDimensions().width() / 100,
+                pkg.packaging().internalDimensions().length() / 100
+            );
+            return new OptimizerRequestItemRowDTO(
+                    pkg.id(), pkg.product().name(),
+                    pkg.product().family().id(), pkg.product().family().name(),
+                    pkg.product().batch(), pkg.product().weight(),
+                    pkg.product().maxSupportedWeight(), dimensions.height(),
+                    dimensions.width(), dimensions.length()
+            );
+        }).toArray(OptimizerRequestItemRowDTO[]::new);
 
         var requestDto = new OptimizerRequestDTO(packagesDto, containersDto);
         return optimizationService.register(requestDto);
