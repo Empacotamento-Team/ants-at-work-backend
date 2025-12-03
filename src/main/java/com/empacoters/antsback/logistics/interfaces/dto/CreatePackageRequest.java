@@ -5,7 +5,17 @@ import java.util.List;
 
 @Data
 public class CreatePackageRequest {
+    // Usar packaging existente
     private Long packagingId;
-    private List<Long> productIds;
+    
+    // Ou criar uma nova packaging
+    private String packagingName;
+    private String packagingDescription;
+    private Double packagingHeight;
+    private Double packagingWidth;
+    private Double packagingLength;
+    
+    // Informações do package
+    private Long productId;
     private Double supportedWeight;
 }
